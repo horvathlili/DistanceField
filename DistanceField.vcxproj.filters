@@ -1,0 +1,70 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="DistanceField.cpp" />
+    <ClCompile Include="Utils\ComputeProgramWrapper.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="Program\Program3D.cpp">
+      <Filter>Program</Filter>
+    </ClCompile>
+    <ClCompile Include="Program\ProgramParam.cpp">
+      <Filter>Program</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="DistanceField.h" />
+    <ClInclude Include="Utils\ComputeProgramWrapper.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Program\Program3D.h">
+      <Filter>Program</Filter>
+    </ClInclude>
+    <ClInclude Include="Program\ProgramParam.h">
+      <Filter>Program</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Program">
+      <UniqueIdentifier>{5f5dd2f7-aa61-429b-8f34-cf1fb7a10800}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utils">
+      <UniqueIdentifier>{14285f70-c35f-4e92-b19b-0dda7c43cc15}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shaders">
+      <UniqueIdentifier>{e0309ba8-a1af-4d4d-ba09-d707ae6b8cf2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shaders\Utils">
+      <UniqueIdentifier>{c1a9c51d-e3d6-45c0-bd78-31a600324170}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shaders\Filter">
+      <UniqueIdentifier>{8ce30d8b-0a98-4446-b15b-166b060f0b3e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shaders\Compute">
+      <UniqueIdentifier>{9014e968-10d4-46ad-afbe-eb0721b81c73}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ShaderSource Include="Shaders\Utils\ray.slang">
+      <Filter>Shaders\Utils</Filter>
+    </ShaderSource>
+    <ShaderSource Include="Shaders\Utils\spheretrace.slang">
+      <Filter>Shaders\Utils</Filter>
+    </ShaderSource>
+    <ShaderSource Include="Shaders\3d.ps.slang">
+      <Filter>Shaders</Filter>
+    </ShaderSource>
+    <ShaderSource Include="Shaders\3d.vs.slang">
+      <Filter>Shaders</Filter>
+    </ShaderSource>
+    <ShaderSource Include="Shaders\Filter\filterparam.slang">
+      <Filter>Shaders\Filter</Filter>
+    </ShaderSource>
+    <ShaderSource Include="Shaders\Compute\param.cs.slang">
+      <Filter>Shaders\Compute</Filter>
+    </ShaderSource>
+    <ShaderSource Include="Shaders\Compute\paramsurf.slang">
+      <Filter>Shaders\Compute</Filter>
+    </ShaderSource>
+  </ItemGroup>
+</Project>
