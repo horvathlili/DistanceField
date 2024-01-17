@@ -1,4 +1,4 @@
-#include "Filter/filterparam.slang"
+#include "Filter/filterparamg2.slang"
 #include "Utils/ray.slang"
 #include "Utils/spheretrace.slang"
 
@@ -18,6 +18,7 @@ cbuffer psCb
 
 Texture2D texturep;
 Texture2D texturen;
+Texture2D texture3;
 
 struct psIn
 {

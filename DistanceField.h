@@ -62,5 +62,7 @@ private:
     CameraController::SharedPtr cameraControl;
 
 
+    DebugConsole console;
+
     ProgramParam programP;
 };

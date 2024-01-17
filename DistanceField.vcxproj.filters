@@ -66,5 +66,11 @@
     <ShaderSource Include="Shaders\Compute\paramsurf.slang">
       <Filter>Shaders\Compute</Filter>
     </ShaderSource>
+    <ShaderSource Include="Shaders\Filter\filterparamg2.slang">
+      <Filter>Shaders\Filter</Filter>
+    </ShaderSource>
+    <ShaderSource Include="Shaders\Compute\paramg2.cs.slang">
+      <Filter>Shaders\Compute</Filter>
+    </ShaderSource>
   </ItemGroup>
 </Project>

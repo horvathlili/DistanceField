@@ -63,6 +63,7 @@ void Program3D::Render(RenderContext* pRenderContext, const Fbo::SharedPtr& pTar
 
         Vars["texturep"] = textures[0];
         Vars["texturen"] = textures[1];
+        Vars["texture3"] = textures[2];
         Vars["psCb"]["eye"] = camera->getPosition();
         Vars["psCb"]["center"] = camera->getTarget();
         Vars["psCb"]["up"] = camera->getUpVector();

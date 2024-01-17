@@ -37,6 +37,8 @@ protected:
     bool retexture = false;
     //is any texture generated
     bool texturedone = false;
+    //render scene
+    bool render = false;
 
     //basic details of the distance field
     int resolution = 32;
@@ -53,7 +55,7 @@ protected:
     void setupGui();
   
     float rs;
-    int minm = 0;
+    uint minm = 0;
 
 
 public:

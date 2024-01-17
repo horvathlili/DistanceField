@@ -10,7 +10,9 @@ private:
 
     std::vector<Texture::SharedPtr> generateTexture(RenderContext* pRenderContext) override;
 
-    
+    void SetUpGui();
+
+    Gui::RadioButtonGroup bg_min;
 
 public:
     void renderGui(Gui::Window* w) override;

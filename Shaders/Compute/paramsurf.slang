@@ -10,7 +10,7 @@
 
 float3 sphereP(float u, float v)
 {
-    u *= 2 * PI;
+    u *= PI;
     v *= 2 * PI;
 
     float x = sin(u) * cos(v);
@@ -21,10 +21,112 @@ float3 sphereP(float u, float v)
 
 }
 
+float3 spheredu(float u, float v)
+{
+    u *= PI;
+    v *= 2 * PI;
+
+    float x = cos(u) * cos(v);
+    float y = -sin(u);
+    float z = cos(u) * sin(v);
+
+    return float3(x, y, z);
+}
+
+float3 spheredv(float u, float v)
+{
+    u *= PI;
+    v *= 2 * PI;
+
+    float x = sin(u) *-sin(v);
+    float y = 0;
+    float z = sin(u) * cos(v);
+
+    return float3(x, y, z);
+}
+
+float3 sphereduu(float u, float v)
+{
+    u *= PI;
+    v *= 2 * PI;
+
+    float x = -sin(u) * cos(v);
+    float y = -cos(u);
+    float z = -sin(u) * sin(v);
+
+    return float3(x, y, z);
+}
+
+float3 sphereduv(float u, float v)
+{
+    u *= PI;
+    v *= 2 * PI;
+
+    float x = cos(u) * -sin(v);
+    float y = 0;
+    float z = cos(u) * cos(v);
+
+    return float3(x, y, z);
+}
+
+float3 spheredvv(float u, float v)
+{
+    u *= PI;
+    v *= 2 * PI;
+
+    float x = sin(u) * -cos(v);
+    float y = 0;
+    float z = sin(u) * sin(v);
+
+    return float3(x, y, z);
+}
+
 float3 mapP(float u, float v)
 {
     #if SHAPE == 0
-        return sphereP(u, v);
+        return sphereP(u,v);
+    #endif
+}
+
+float3 getdu(float u, float v)
+{
+#if SHAPE == 0
+    return spheredu(u, v);
+#endif
+}
+
+float3 getdv(float u, float v)
+{
+#if SHAPE == 0
+    return spheredv(u, v);
+#endif
+}
+
+float3 getduu(float u, float v)
+{
+#if SHAPE == 0
+    return sphereduu(u, v);
+#endif
+}
+
+float3 getduv(float u, float v)
+{
+#if SHAPE == 0
+    return sphereduv(u, v);
+#endif
+}
+
+float3 getdvv(float u, float v)
+{
+#if SHAPE == 0
+    return spheredvv(u, v);
+#endif
+}
+
+float2 convertParam(float u, float v)
+{
+    #if SHAPE == 0
+    return float2(u * PI, v * 2 * PI);
     #endif
 }
 
