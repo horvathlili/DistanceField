@@ -76,7 +76,7 @@ float3 spheredvv(float u, float v)
 
     float x = sin(u) * -cos(v);
     float y = 0;
-    float z = sin(u) * sin(v);
+    float z = -sin(u) * sin(v);
 
     return float3(x, y, z);
 }

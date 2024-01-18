@@ -56,9 +56,9 @@ void main(uint2 threadId : SV_DispatchThreadID)
     float g = (L * N - M * M) / (E * G - F * F); //gauss curvature
     float h = (L * G - 2 * M * F + N * E) / (2 * (E * G - F * F)); //mean curvature
 
-    float r = h + sqrt(h * h - g);
+    float r = h + sqrt(abs(h * h - g));
 
-    float R = h - sqrt(h * h - g);
+    float R = h - sqrt(abs(h * h - g));
 
    
 
