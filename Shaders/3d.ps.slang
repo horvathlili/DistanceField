@@ -1,4 +1,13 @@
-#include "Filter/filterparamg2.slang"
+#ifndef FIELD
+#define FIELD 1
+#endif
+
+#if FIELD == 1
+    #include "Filter/filterparam.slang"
+#endif
+#if FIELD == 2
+    #include "Filter/filterparamg2.slang"
+#endif
 #include "Utils/ray.slang"
 #include "Utils/spheretrace.slang"
 

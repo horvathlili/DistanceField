@@ -2,7 +2,7 @@
 
 RWTexture2D<float3> texp;
 RWTexture2D<float3> texn;
-
+RWTexture2D<float3> tex3;
 
 
 cbuffer csCb

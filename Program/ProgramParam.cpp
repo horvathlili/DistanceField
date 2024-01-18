@@ -14,6 +14,18 @@ void ProgramParam::SetUpGui() {
 
     bg_min.push_back(min1);
     bg_min.push_back(min2);
+
+    Gui::RadioButton g1;
+    g1.label = "g1";
+    g1.buttonID = 1;
+    g1.sameLine = false;
+    Gui::RadioButton g2;
+    g2.label = "g2";
+    g2.buttonID = 2;
+    g2.sameLine = true;
+
+    bg_field.push_back(g1);
+    bg_field.push_back(g2);
 }
 
 ProgramParam::ProgramParam() {
@@ -25,6 +37,7 @@ ProgramParam::ProgramParam() {
 }
 
 void ProgramParam::renderGui(Gui::Window* w) {
+    w->radioButtons(bg_field, fieldb);
     if (w->button("start")) {
         retexture = true;
         resolution = sliderRes;
@@ -48,6 +61,15 @@ std::vector<Texture::SharedPtr> ProgramParam::generateTexture(RenderContext* pRe
         format = ResourceFormat::RGBA32Float;
     }
 
+    field = fieldb;
+
+    if (field == 1) {
+        ComputeProgram->createProgram("Samples/DistanceField/Shaders/Compute/param.cs.slang");
+    }
+    if (field == 2) {
+        ComputeProgram->createProgram("Samples/DistanceField/Shaders/Compute/paramg2.cs.slang");
+    }
+
 
     pTexp = Texture::create2D(resolution, resolution, format, 1, 1, nullptr, ResourceBindFlags::ShaderResource | ResourceBindFlags::UnorderedAccess);
     pTexn = Texture::create2D(resolution, resolution, format, 1, 1, nullptr, ResourceBindFlags::ShaderResource | ResourceBindFlags::UnorderedAccess);
@@ -60,21 +82,21 @@ std::vector<Texture::SharedPtr> ProgramParam::generateTexture(RenderContext* pRe
     comp["tex3"].setUav(pTex3->getUAV(0));
     comp["csCb"]["res"] = resolution;
     comp["csCb"]["boundingBox"] = boundingBox;
-    comp.allocateStructuredBuffer("data1", resolution *  resolution);
+    //comp.allocateStructuredBuffer("data1", resolution *  resolution);
 
 
     comp.runProgram(pRenderContext, resolution, resolution);
 
     std::vector<float4> data1;
 
-    auto dataptr = comp.mapBuffer<const float4>("data1");
+  /*  auto dataptr = comp.mapBuffer<const float4>("data1");
     data1.resize(resolution * resolution);
     data1.assign(dataptr, dataptr + resolution * resolution);
     comp.unmapBuffer("data1");
 
     for (int i = 0; i < resolution * resolution; i++) {
-        std::cout << data1[i].x << " " << data1[i].y << std::endl;
-    }
+        std::cout << data1[i].x << " " << data1[i].y <<" "<<data1[i].z<< std::endl;
+    }*/
   
     std::vector<Texture::SharedPtr> textures;
     textures.push_back(pTexp);

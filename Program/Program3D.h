@@ -56,6 +56,7 @@ protected:
   
     float rs;
     uint minm = 0;
+    uint field = 0;
 
 
 public:

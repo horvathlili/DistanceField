@@ -13,6 +13,9 @@ private:
     void SetUpGui();
 
     Gui::RadioButtonGroup bg_min;
+    Gui::RadioButtonGroup bg_field;
+
+    uint fieldb = 1;
 
 public:
     void renderGui(Gui::Window* w) override;

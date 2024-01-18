@@ -18,6 +18,12 @@ float2 getUV(float x, float y)
 
 }
 
+float sphereDist(float3 pos, float3 p, float r)
+{
+    return length(pos - p) - r;
+}
+
+
 [numthreads(8, 8)]
 void main(uint2 threadId : SV_DispatchThreadID)
 {
@@ -56,30 +62,29 @@ void main(uint2 threadId : SV_DispatchThreadID)
     float g = (L * N - M * M) / (E * G - F * F); //gauss curvature
     float h = (L * G - 2 * M * F + N * E) / (2 * (E * G - F * F)); //mean curvature
 
-    float r = h + sqrt(abs(h * h - g));
+    float kr = h + sqrt(abs(h * h - g));
 
-    float R = h - sqrt(abs(h * h - g));
+    float kR = h - sqrt(abs(h * h - g));
 
    
 
     
-    float l = -(M - r * F) / (N - r * G);
+    float l = -(M - kr * F) / (N - kr * G);
 
     float3 t = normalize(dv) + l * normalize(du);
 
     t = normalize(t);
 
+   
     
-    
-    
-    texp[threadId.xy] = float4(p, r);
-    texn[threadId.xy] = float4(n, R);
-    tex3[threadId.xy] = float4(t, R);
+    texp[threadId.xy] = float4(p, kr);
+    texn[threadId.xy] = float4(n, kR);
+    tex3[threadId.xy] = float4(t,kR);
 
     int datai = threadId.x * res + threadId.y;
   
    
-    data1[datai] = float4(R, r,0,0);
+   // data1[datai] = float4(dTorus,0,0,0);
 }
 
 
