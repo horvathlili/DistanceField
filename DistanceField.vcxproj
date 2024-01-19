@@ -30,6 +30,7 @@
   <ItemGroup>
     <ShaderSource Include="Shaders\3d.ps.slang" />
     <ShaderSource Include="Shaders\3d.vs.slang" />
+    <ShaderSource Include="Shaders\Compute\bezier.slang" />
     <ShaderSource Include="Shaders\Compute\param.cs.slang" />
     <ShaderSource Include="Shaders\Compute\paramg2.cs.slang" />
     <ShaderSource Include="Shaders\Compute\paramsurf.slang" />

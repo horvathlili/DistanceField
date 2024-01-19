@@ -10,6 +10,7 @@ cbuffer csCb
 {
     int res;
     float boundingBox;
+    int shape;
 };
 
 float2 getUV(float x, float y)
@@ -62,16 +63,23 @@ void main(uint2 threadId : SV_DispatchThreadID)
     float g = (L * N - M * M) / (E * G - F * F); //gauss curvature
     float h = (L * G - 2 * M * F + N * E) / (2 * (E * G - F * F)); //mean curvature
 
-    float kr = h + sqrt(abs(h * h - g));
+    float kr = h + sqrt(max(h * h - g, 0));
 
-    float kR = h - sqrt(abs(h * h - g));
+    float kR = h - sqrt(max(h * h - g, 0));
 
-   
+    float r;
+
+    if (abs(kr) < abs(kR))
+    {
+        r = kr;
+        kr = kR;
+        kR = r;
+    }
 
     
     float l = -(M - kr * F) / (N - kr * G);
 
-    float3 t = normalize(dv) + l * normalize(du);
+    float3 t = normalize(du) + l * normalize(dv);
 
     t = normalize(t);
 
@@ -84,7 +92,7 @@ void main(uint2 threadId : SV_DispatchThreadID)
     int datai = threadId.x * res + threadId.y;
   
    
-   // data1[datai] = float4(dTorus,0,0,0);
+    data1[datai] = float4(kr,kR,0,0);
 }
 
 

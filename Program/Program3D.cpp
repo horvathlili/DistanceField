@@ -75,6 +75,7 @@ void Program3D::Render(RenderContext* pRenderContext, const Fbo::SharedPtr& pTar
         Vars["psCb"]["rs"] = rs;
         Program->addDefine("MINM", std::to_string(minm));
         Program->addDefine("FIELD", std::to_string(field));
+       
 
         if (isbox) {
             State->setVao(cubeVao);

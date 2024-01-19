@@ -23,29 +23,29 @@ float filter(float3 pos)
     float mind = 1000000;
     float3 minp = float3(10000);
 
-    for (int i = 0; i < res; i++)
+    for (int i = 1; i < res; i++)
     {
         for (int j = 0; j < res; j++)
         {
             float3 p = texturep[float2(i, j)].xyz;
             float3 n = texturen[float2(i, j)].xyz;
 
-            float d = max(abs(planeDist(pos, p, n)),sphereDist(pos, p, rs));
+            float d = max(abs(planeDist(pos, p, n)), sphereDist(pos, p, rs));
 
-            #if MINM == 1
+#if MINM == 1
             if (  ( length(pos - minp) >= length(pos - p)))
             {
                 mind = d;
                 minp = p;
             }
-            #endif
-            #if MINM == 0
-            if ( d < mind)
+#endif
+#if MINM == 0
+            if (d < mind)
             {
                 mind = d;
                 minp = p;
             }
-            #endif
+#endif
         }
     }
 

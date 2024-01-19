@@ -26,6 +26,29 @@ void ProgramParam::SetUpGui() {
 
     bg_field.push_back(g1);
     bg_field.push_back(g2);
+
+    Gui::RadioButton sphere;
+    sphere.label = "sphere";
+    sphere.buttonID = 0;
+    sphere.sameLine = false;
+    Gui::RadioButton bezier;
+    bezier.label = "bezier";
+    bezier.buttonID = 1;
+    bezier.sameLine = true;
+
+    bg_shape.push_back(sphere);
+    bg_shape.push_back(bezier);
+}
+
+void ProgramParam::randomBezier() {
+
+    bezier.resize(n * m);
+
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < m; j++) {
+            bezier[i * m + j] = float3(i / (float)n, rand()/(float)RAND_MAX, j / (float)m);
+        }
+    }
 }
 
 ProgramParam::ProgramParam() {
@@ -34,10 +57,12 @@ ProgramParam::ProgramParam() {
     ComputeProgram->createProgram("Samples/DistanceField/Shaders/Compute/paramg2.cs.slang");
 
     SetUpGui();
+    randomBezier();
 }
 
 void ProgramParam::renderGui(Gui::Window* w) {
     w->radioButtons(bg_field, fieldb);
+    w->radioButtons(bg_shape, shape);
     if (w->button("start")) {
         retexture = true;
         resolution = sliderRes;
@@ -82,21 +107,22 @@ std::vector<Texture::SharedPtr> ProgramParam::generateTexture(RenderContext* pRe
     comp["tex3"].setUav(pTex3->getUAV(0));
     comp["csCb"]["res"] = resolution;
     comp["csCb"]["boundingBox"] = boundingBox;
-    //comp.allocateStructuredBuffer("data1", resolution *  resolution);
-
+    comp.allocateStructuredBuffer("data1", resolution *  resolution);
+    comp.allocateStructuredBuffer("b", n*m, bezier.data(), sizeof(float3) * n*m);
+    comp["csCb"]["shape"] = shape;
 
     comp.runProgram(pRenderContext, resolution, resolution);
 
     std::vector<float4> data1;
 
-  /*  auto dataptr = comp.mapBuffer<const float4>("data1");
+    auto dataptr = comp.mapBuffer<const float4>("data1");
     data1.resize(resolution * resolution);
     data1.assign(dataptr, dataptr + resolution * resolution);
     comp.unmapBuffer("data1");
 
     for (int i = 0; i < resolution * resolution; i++) {
         std::cout << data1[i].x << " " << data1[i].y <<" "<<data1[i].z<< std::endl;
-    }*/
+    }
   
     std::vector<Texture::SharedPtr> textures;
     textures.push_back(pTexp);

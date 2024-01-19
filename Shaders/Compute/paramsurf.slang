@@ -2,6 +2,8 @@
 
 #define PI 3.1415
 
+#include "bezier.slang"
+
 #ifndef SHAPE
 #define SHAPE 0
 #endif
@@ -83,44 +85,63 @@ float3 spheredvv(float u, float v)
 
 float3 mapP(float u, float v)
 {
-    #if SHAPE == 0
-        return sphereP(u,v);
-    #endif
+    if (shape == 0)
+        return sphereP(u, v);
+   
+    if (shape == 1)
+        return bezier(u, v);
+
+    return float3(0, 0, 0);
 }
 
 float3 getdu(float u, float v)
 {
-#if SHAPE == 0
+    if (shape == 0)
     return spheredu(u, v);
-#endif
+    if (shape == 1)
+        return bezierdu(u, v);
+    
+    return float3(0, 0, 0);
 }
 
 float3 getdv(float u, float v)
 {
-#if SHAPE == 0
+    if (shape == 0)
     return spheredv(u, v);
-#endif
+    if (shape == 1)
+        return bezierdv(u, v);
+    
+    return float3(0, 0, 0);
 }
 
 float3 getduu(float u, float v)
 {
-#if SHAPE == 0
+    if (shape == 0)
     return sphereduu(u, v);
-#endif
+    if (shape == 1)
+    return bezierduu(u, v);
+    
+    return float3(0, 0, 0);
 }
 
 float3 getduv(float u, float v)
 {
-#if SHAPE == 0
+    if (shape == 0)
     return sphereduv(u, v);
-#endif
+    if (shape == 1)
+    return bezierduv(u, v);
+    
+    return float3(0, 0, 0);
 }
 
 float3 getdvv(float u, float v)
 {
-#if SHAPE == 0
+    if (shape == 0)
     return spheredvv(u, v);
-#endif
+    if (shape == 1)
+    return bezierdvv(u, v);
+    
+    return float3(0, 0, 0);
 }
 
 float2 convertParam(float u, float v)

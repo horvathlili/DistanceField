@@ -57,6 +57,7 @@ protected:
     float rs;
     uint minm = 0;
     uint field = 0;
+    uint shape = 0;
 
 
 public:

@@ -72,5 +72,8 @@
     <ShaderSource Include="Shaders\Compute\paramg2.cs.slang">
       <Filter>Shaders\Compute</Filter>
     </ShaderSource>
+    <ShaderSource Include="Shaders\Compute\bezier.slang">
+      <Filter>Shaders\Compute</Filter>
+    </ShaderSource>
   </ItemGroup>
 </Project>

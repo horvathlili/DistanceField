@@ -87,7 +87,7 @@ float filter(float3 pos)
 
     for (int i = 1; i < res; i++)
     {
-        for (int j = 0; j <res; j++)
+        for (int j = 0; j <res-1; j++)
         {
             float3 p = texturep[float2(i, j)].xyz;
             float3 n = texturen[float2(i, j)].xyz;
