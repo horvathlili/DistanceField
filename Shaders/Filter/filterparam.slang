@@ -23,7 +23,7 @@ float filter(float3 pos)
     float mind = 1000000;
     float3 minp = float3(10000);
 
-    for (int i = 1; i < res; i++)
+    for (int i = 0; i < res; i++)
     {
         for (int j = 0; j < res; j++)
         {

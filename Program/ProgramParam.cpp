@@ -40,15 +40,41 @@ void ProgramParam::SetUpGui() {
     bg_shape.push_back(bezier);
 }
 
+float factorial(float n)
+{
+
+    float r = 1;
+    for (int i = 1; i <= n; i++)
+    {
+        r *= i;
+    }
+
+    return (float)r;
+}
+
+float bernstein(float n, float i, float u)
+{
+    float bi = factorial(n) / (float)(factorial(i) * factorial(n - i));
+
+    return bi * pow(u, i) * pow(1 - u, n - i);
+
+}
+
 void ProgramParam::randomBezier() {
 
     bezier.resize(n * m);
 
     for (int i = 0; i < n; i++) {
         for (int j = 0; j < m; j++) {
-            bezier[i * m + j] = float3(i / (float)n, rand()/(float)RAND_MAX, j / (float)m);
+            bezier[i * m + j] = float3(i / (float)n, 0.5, j / (float)m);
+            //bezier[i * m + j] = float3(i / (float)n, sin(i)/3.f, j / (float)m);
         }
     }
+
+   /* for (int i = 0; i < n * m; i++) {
+        std::cout << bezier[i].x <<" " << bezier[i].y << " " << bezier[i].z << " " << std::endl;
+    }*/
+
 }
 
 ProgramParam::ProgramParam() {

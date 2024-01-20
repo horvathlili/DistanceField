@@ -15,15 +15,30 @@ float factorial(float n)
 
 float bernstein(float n, float i, float u)
 {
-    float bi = factorial(n) / (factorial(i) * factorial(n - i));
+    float bi = factorial(n) /   (float) (factorial(i) * factorial(n - i));
 
-    return bi * pow(u, i) * pow(1 - u, n - i);
+    float p1 = pow(u, i);
+
+    float p2 = pow(1 - u, n - i);
+
+    if (i == 0)
+    {
+        p1 = 1;
+    }
+
+    if (n-i == 0)
+    {
+        p2 = 1;
+    }
+
+    return bi * p1 *p2;
 
 }
 
 float3 bij(float i, float j)
 {
-    return b[i*20+j];
+   return float3((i) / 20.f, 0.5, (j)/20.f);
+   // return b[i*20+j];
 }
 
 float3 bezier(float u, float v)
@@ -37,7 +52,7 @@ float3 bezier(float u, float v)
     {
         for (int j = 0; j < m; j++)
         {
-            r += bij(i , j ) * bernstein(n, i, u) * bernstein(m, j, v);
+            r += (bij(i, j) * bernstein(n, i, u) * bernstein(m, j, v));
 
         }
     }

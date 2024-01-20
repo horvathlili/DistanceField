@@ -85,9 +85,9 @@ float filter(float3 pos)
     float mind = 1000000;
     float3 minp = float3(10000);
 
-    for (int i = 1; i < res; i++)
+    for (int i =1; i < res-1; i++)
     {
-        for (int j = 0; j <res-1; j++)
+        for (int j = 1; j <res-1; j++)
         {
             float3 p = texturep[float2(i, j)].xyz;
             float3 n = texturen[float2(i, j)].xyz;

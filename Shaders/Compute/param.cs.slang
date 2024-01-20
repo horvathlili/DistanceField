@@ -15,7 +15,7 @@ cbuffer csCb
 
 float2 getUV(float x, float y)
 {
-    return float2(x / (float) res, y / (float) res );
+    return float2((x ) / (float) (res), (y ) / (float) (res));
 
 }
 
