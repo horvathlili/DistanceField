@@ -11,6 +11,8 @@ cbuffer csCb
     int res;
     float boundingBox;
     int shape;
+    int n;
+    int m;
 };
 
 float2 getUV(float x, float y)

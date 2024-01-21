@@ -34,8 +34,10 @@
     <ShaderSource Include="Shaders\Compute\param.cs.slang" />
     <ShaderSource Include="Shaders\Compute\paramg2.cs.slang" />
     <ShaderSource Include="Shaders\Compute\paramsurf.slang" />
+    <ShaderSource Include="Shaders\Compute\test.cs.slang" />
     <ShaderSource Include="Shaders\Filter\filterparam.slang" />
     <ShaderSource Include="Shaders\Filter\filterparamg2.slang" />
+    <ShaderSource Include="Shaders\Utils\param.slang" />
     <ShaderSource Include="Shaders\Utils\ray.slang" />
     <ShaderSource Include="Shaders\Utils\spheretrace.slang" />
   </ItemGroup>

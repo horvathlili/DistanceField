@@ -52,12 +52,17 @@ protected:
 
     //methods
     virtual std::vector<Texture::SharedPtr> generateTexture(RenderContext* pRenderContext) = 0;
+    virtual void testing(RenderContext* pRenderContext) = 0;
     void setupGui();
   
     float rs;
     uint minm = 0;
     uint field = 0;
     uint shape = 0;
+
+    ComputeProgramWrapper::SharedPtr testProgram;
+    bool test = false;
+    int testres = 10;
 
 
 public:

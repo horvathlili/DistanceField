@@ -15,11 +15,77 @@ float sphereDist(float3 pos, float3 p, float r)
     return length(pos - p) - r;
 }
 
+float wk(int i, int j, float3 pos)
+{
+    float3 p = texturep[float2(i, j)].xyz;
+    float3 n = texturen[float2(i, j)].xyz;
 
+    float d = abs(planeDist(pos, p, n));
+
+    return 1 / d;
+
+}
+
+float interp(float3 pos)
+{
+    float s = 0;
+
+    float dist = 0;
+
+    float d[4] = { 100, 100, 100, 100 };
+    
+    float pp[4] = { 100, 100, 100, 100 };
+
+    for (int i = 0; i < res; i++)
+    {
+        for (int j = 0; j < res; j++)
+        {
+            float3 p = texturep[float2(i, j)].xyz;
+            float3 n = texturen[float2(i, j)].xyz;
+
+            float dist = abs(planeDist(pos, p, n));
+
+
+           
+            int k = 0;
+            while (k < 2 && pp[k] < length(p - pos))
+            {
+                k++;
+            }
+
+            if (k < 2)
+            {
+                int l = 3;
+
+                while (l > k)
+                {
+                    d[l] = d[l - 1];
+                    pp[l] = pp[l - 1];
+                    l--;
+                }
+                d[k] = dist;
+                pp[k] = length(p - pos);
+            }
+
+        }
+    }
+
+    float di = 0;
+    float sum = 0;
+
+    for (int l = 0; l <2; l++)
+    {
+        di += d[ l];
+      
+
+    }
+    
+        return di/4;
+}
 
 float filter(float3 pos)
 {
-
+    //return interp(pos);
     float mind = 1000000;
     float3 minp = float3(10000);
 
@@ -52,6 +118,8 @@ float filter(float3 pos)
     return mind;
 
 }
+
+
 
 float getDifference(float3 p1, float3 p2)
 {

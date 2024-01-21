@@ -9,6 +9,7 @@ private:
     Texture::SharedPtr csgTexture;
 
     std::vector<Texture::SharedPtr> generateTexture(RenderContext* pRenderContext) override;
+    virtual void testing(RenderContext* pRenderContext) override;
     void randomBezier();
     void SetUpGui();
 
@@ -18,8 +19,8 @@ private:
 
     uint fieldb = 1;
 
-    int n = 20;
-    int m = 20;
+    int n = 5;
+    int m = 5;
     std::vector<float3> bezier;
 
 public:

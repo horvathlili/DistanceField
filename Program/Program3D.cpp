@@ -44,6 +44,8 @@ bool Program3D::isOutOfBox(float3 pos)
 }
 
 
+
+
 void Program3D::Render(RenderContext* pRenderContext, const Fbo::SharedPtr& pTargetFbo) {
     State->setFbo(pTargetFbo);
     isbox = isOutOfBox(camera->getPosition());
@@ -52,6 +54,10 @@ void Program3D::Render(RenderContext* pRenderContext, const Fbo::SharedPtr& pTar
         textures = generateTexture(pRenderContext);
         retexture = false;
         texturedone = true;
+    }
+
+    if (texturedone && test) {
+        testing(pRenderContext);
     }
 
     if (texturedone) {

@@ -62,12 +62,12 @@ float bernstein(float n, float i, float u)
 
 void ProgramParam::randomBezier() {
 
-    bezier.resize(n * m);
+    bezier.resize((n+1) * (m+1));
 
-    for (int i = 0; i < n; i++) {
-        for (int j = 0; j < m; j++) {
-            bezier[i * m + j] = float3(i / (float)n, 0.5, j / (float)m);
-            //bezier[i * m + j] = float3(i / (float)n, sin(i)/3.f, j / (float)m);
+    for (int i = 0; i <= n; i++) {
+        for (int j = 0; j <= m; j++) {
+            //bezier[i * m + j] = float3(i / (float)n, 0.5, j / (float)m);
+            bezier[i * (m+1) + j] = float3(i / (float)n, rand()/(float)RAND_MAX, j / (float)m);
         }
     }
 
@@ -82,8 +82,32 @@ ProgramParam::ProgramParam() {
     ComputeProgram = ComputeProgramWrapper::create();
     ComputeProgram->createProgram("Samples/DistanceField/Shaders/Compute/paramg2.cs.slang");
 
+    testProgram = ComputeProgramWrapper::create();
+    testProgram->createProgram("Samples/DistanceField/Shaders/Compute/test.cs.slang");
+
     SetUpGui();
     randomBezier();
+}
+
+void ProgramParam::testing(RenderContext* pRenderContext) {
+
+    auto& comp = *testProgram;
+
+    //    testres = 217;
+    comp["csCb"]["testres"] = testres;
+    comp["texturep"] = textures[0];
+    comp["texturen"] = textures[1];
+    comp["texture3"] = textures[2];
+    comp["csCb"]["boundingBox"] = boundingBox;
+    comp["csCb"]["res"] = resolution;
+    comp["csCb"]["n"] = n;
+    comp["csCb"]["m"] = m;
+    comp["csCb"]["shape"] = shape;
+    comp.getProgram()->addDefine("FIELD", std::to_string(field));
+    comp.getProgram()->addDefine("MINM", std::to_string(minm));
+
+    comp.runProgram(pRenderContext, testres, testres);
+
 }
 
 void ProgramParam::renderGui(Gui::Window* w) {
@@ -98,6 +122,11 @@ void ProgramParam::renderGui(Gui::Window* w) {
     w->slider("intersecting sphere", rs, 0.f, 1.f);
     (w->slider("boundingBox", sliderboundingBox, 2.f, 20.f));
     w->radioButtons(bg_min, minm);
+    w->separator();
+    if (w->button("Run test")) {
+        test = true;
+    }
+    w->slider("Test resolution", testres, 1, 512);
 }
 
 
@@ -134,8 +163,10 @@ std::vector<Texture::SharedPtr> ProgramParam::generateTexture(RenderContext* pRe
     comp["csCb"]["res"] = resolution;
     comp["csCb"]["boundingBox"] = boundingBox;
     comp.allocateStructuredBuffer("data1", resolution *  resolution);
-    comp.allocateStructuredBuffer("b", n*m, bezier.data(), sizeof(float3) * n*m);
+    comp.allocateStructuredBuffer("b", (n+1)*(m+1), bezier.data(), sizeof(float3) * (n + 1) * (m + 1));
     comp["csCb"]["shape"] = shape;
+    comp["csCb"]["n"] = n;
+    comp["csCb"]["m"] = m;
 
     comp.runProgram(pRenderContext, resolution, resolution);
 
