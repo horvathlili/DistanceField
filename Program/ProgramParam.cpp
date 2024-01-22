@@ -103,10 +103,29 @@ void ProgramParam::testing(RenderContext* pRenderContext) {
     comp["csCb"]["n"] = n;
     comp["csCb"]["m"] = m;
     comp["csCb"]["shape"] = shape;
+    comp["csCb"]["rs"] = rs;
     comp.getProgram()->addDefine("FIELD", std::to_string(field));
     comp.getProgram()->addDefine("MINM", std::to_string(minm));
+    comp.getProgram()->addDefine("SHAPE", std::to_string(shape));
+    comp.allocateStructuredBuffer("data1", testres*testres*testres);
+
 
     comp.runProgram(pRenderContext, testres, testres);
+
+    std::vector<float> data1;
+
+    auto dataptr = comp.mapBuffer<const float>("data1");
+    data1.resize(testres * testres * testres);
+    data1.assign(dataptr, dataptr + testres * testres * testres);
+    comp.unmapBuffer("data1");
+
+
+    float avg = 0;
+    for (int i = 0; i < testres * testres * testres; i++) {
+        avg += data1[i];
+    }
+
+    std::cout << avg / (float)(testres * testres * testres) << std::endl;
 
 }
 
@@ -162,6 +181,7 @@ std::vector<Texture::SharedPtr> ProgramParam::generateTexture(RenderContext* pRe
     comp["tex3"].setUav(pTex3->getUAV(0));
     comp["csCb"]["res"] = resolution;
     comp["csCb"]["boundingBox"] = boundingBox;
+    comp.getProgram()->addDefine("SHAPE", std::to_string(shape));
     comp.allocateStructuredBuffer("data1", resolution *  resolution);
     comp.allocateStructuredBuffer("b", (n+1)*(m+1), bezier.data(), sizeof(float3) * (n + 1) * (m + 1));
     comp["csCb"]["shape"] = shape;
@@ -176,6 +196,8 @@ std::vector<Texture::SharedPtr> ProgramParam::generateTexture(RenderContext* pRe
     data1.resize(resolution * resolution);
     data1.assign(dataptr, dataptr + resolution * resolution);
     comp.unmapBuffer("data1");
+
+   
 
     for (int i = 0; i < resolution * resolution; i++) {
         std::cout << data1[i].x << " " << data1[i].y <<" "<<data1[i].z<< std::endl;

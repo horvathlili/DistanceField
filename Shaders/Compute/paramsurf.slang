@@ -85,61 +85,70 @@ float3 spheredvv(float u, float v)
 
 float3 mapP(float u, float v)
 {
-    if (shape == 0)
+    #if SHAPE == 0
         return sphereP(u, v);
+    #endif
    
-    if (shape == 1)
+   #if SHAPE == 1
         return bezier(u, v);
-
+    #endif
     return float3(0, 0, 0);
 }
 
 float3 getdu(float u, float v)
 {
-    if (shape == 0)
+    #if SHAPE == 0
     return spheredu(u, v);
-    if (shape == 1)
+    #endif
+    #if SHAPE == 1
         return bezierdu(u, v);
-    
+    #endif
+
     return float3(0, 0, 0);
 }
 
 float3 getdv(float u, float v)
 {
-    if (shape == 0)
+#if SHAPE == 0
     return spheredv(u, v);
-    if (shape == 1)
+    #endif
+    #if SHAPE == 1
         return bezierdv(u, v);
-    
+    #endif
     return float3(0, 0, 0);
 }
 
 float3 getduu(float u, float v)
 {
-    if (shape == 0)
+#if SHAPE == 0
     return sphereduu(u, v);
-    if (shape == 1)
-    return bezierduu(u, v);
-    
+    #endif
+    #if SHAPE == 1
+        return bezierduu(u, v);
+    #endif
     return float3(0, 0, 0);
 }
 
 float3 getduv(float u, float v)
 {
-    if (shape == 0)
+#if SHAPE == 0
     return sphereduv(u, v);
-    if (shape == 1)
-    return bezierduv(u, v);
+    #endif
+    #if SHAPE == 1
+        return bezierduv(u, v);
+    #endif
     
     return float3(0, 0, 0);
 }
 
 float3 getdvv(float u, float v)
 {
-    if (shape == 0)
+#if SHAPE == 0
     return spheredvv(u, v);
-    if (shape == 1)
-    return bezierdvv(u, v);
+    #endif
+    #if SHAPE == 1
+        return bezierdvv(u, v);
+    #endif
     
     return float3(0, 0, 0);
 }

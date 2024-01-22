@@ -28,6 +28,8 @@ Texture2D texturep;
 Texture2D texturen;
 Texture2D texture3;
 
+RWStructuredBuffer<float> data1;
+
 
 float3 getQueryPoint(float3 p)
 {
@@ -52,9 +54,9 @@ void main(uint2 threadId : SV_DispatchThreadID)
     {
 
         float3 pos = getQueryPoint(float3(threadId.xy, i));
-        error = abs(map(pos) - filter(pos));
+        error = abs(map(pos)- filter(pos));
 
-        float3 fp, n;   
+        data1[threadId.x * testres * testres + threadId.y * testres + i] = error;
   
     }
 

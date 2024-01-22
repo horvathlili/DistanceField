@@ -43,6 +43,16 @@ float sphereDist(float3 pos, float3 p, float r)
     return length(pos - p) - r;
 }
 
+float cylinderDist(float3 p, float r, float3 c, float3 n, float3 d)
+{
+    float x = dot(p - c, n);
+    float y = dot(p - c, d);
+
+    return length(float2(x, y)) - r;
+
+}
+
+
 float getTorusDist(float3 pos, float3 fp, float3 t,float3 n, float kr, float kR)
 {
     float r = 1.0f / abs(kr);
@@ -70,6 +80,21 @@ float getTorusDist(float3 pos, float3 fp, float3 t,float3 n, float kr, float kR)
     
         c = fp + n / kr;
          dTorus = sphereDist(pos, c, r);
+    }
+
+    if (abs(kr) < 0.1 && abs(kR) < 0.1)
+    {
+        dTorus =  planeDist(pos, fp,normalize(n));
+    }
+
+    if (abs(kR) < 0.1 && abs(kr) >= 0.1)
+    {
+
+        //recalculate the center
+        c = fp + n * 1 / kr;
+        dTorus = cylinderDist(pos, r, c, n, t);
+
+        
     }
 
     return dTorus;

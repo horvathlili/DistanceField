@@ -58,6 +58,7 @@ void Program3D::Render(RenderContext* pRenderContext, const Fbo::SharedPtr& pTar
 
     if (texturedone && test) {
         testing(pRenderContext);
+        test = false;
     }
 
     if (texturedone) {
@@ -81,7 +82,8 @@ void Program3D::Render(RenderContext* pRenderContext, const Fbo::SharedPtr& pTar
         Vars["psCb"]["rs"] = rs;
         Program->addDefine("MINM", std::to_string(minm));
         Program->addDefine("FIELD", std::to_string(field));
-       
+        Program->addDefine("SHAPE", std::to_string(shape));
+
 
         if (isbox) {
             State->setVao(cubeVao);
