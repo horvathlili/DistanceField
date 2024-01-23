@@ -35,9 +35,19 @@ void ProgramParam::SetUpGui() {
     bezier.label = "bezier";
     bezier.buttonID = 1;
     bezier.sameLine = true;
+    Gui::RadioButton cyl;
+    cyl.label = "cylinder";
+    cyl.buttonID = 2;
+    cyl.sameLine = true;
+    Gui::RadioButton cone;
+    cone.label = "cone";
+    cone.buttonID = 3;
+    cone.sameLine = true;
 
     bg_shape.push_back(sphere);
     bg_shape.push_back(bezier);
+    bg_shape.push_back(cyl);
+    bg_shape.push_back(cone);
 }
 
 float factorial(float n)
@@ -67,7 +77,7 @@ void ProgramParam::randomBezier() {
     for (int i = 0; i <= n; i++) {
         for (int j = 0; j <= m; j++) {
             //bezier[i * m + j] = float3(i / (float)n, 0.5, j / (float)m);
-            bezier[i * (m+1) + j] = float3(i / (float)n, rand()/(float)RAND_MAX, j / (float)m);
+            bezier[i * (m+1) + j] = float3(i / (float)n * boundingBox - boundingBox/2.f, rand()/(float)RAND_MAX, j / (float)m * boundingBox - boundingBox / 2.f);
         }
     }
 

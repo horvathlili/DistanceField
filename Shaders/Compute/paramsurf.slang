@@ -12,8 +12,6 @@
 
 float3 sphereP(float u, float v)
 {
-    u *= PI;
-    v *= 2 * PI;
 
     float x = sin(u) * cos(v);
     float y = cos(u);
@@ -25,8 +23,6 @@ float3 sphereP(float u, float v)
 
 float3 spheredu(float u, float v)
 {
-    u *= PI;
-    v *= 2 * PI;
 
     float x = cos(u) * cos(v);
     float y = -sin(u);
@@ -37,20 +33,16 @@ float3 spheredu(float u, float v)
 
 float3 spheredv(float u, float v)
 {
-    u *= PI;
-    v *= 2 * PI;
-
+  
     float x = sin(u) *-sin(v);
     float y = 0;
     float z = sin(u) * cos(v);
-
+    
     return float3(x, y, z);
 }
 
 float3 sphereduu(float u, float v)
 {
-    u *= PI;
-    v *= 2 * PI;
 
     float x = -sin(u) * cos(v);
     float y = -cos(u);
@@ -61,9 +53,6 @@ float3 sphereduu(float u, float v)
 
 float3 sphereduv(float u, float v)
 {
-    u *= PI;
-    v *= 2 * PI;
-
     float x = cos(u) * -sin(v);
     float y = 0;
     float z = cos(u) * cos(v);
@@ -73,12 +62,119 @@ float3 sphereduv(float u, float v)
 
 float3 spheredvv(float u, float v)
 {
-    u *= PI;
-    v *= 2 * PI;
-
+   
     float x = sin(u) * -cos(v);
     float y = 0;
     float z = -sin(u) * sin(v);
+
+    return float3(x, y, z);
+}
+
+float3 cylP(float u, float v)
+{
+    
+    float x = cos(u);
+    float z = sin(u);
+    float y = v;
+
+    return float3(x, y, z);
+}
+
+float3 cyldu(float u, float v)
+{
+    float x = -sin(u);
+    float z =  cos(u);
+    float y = 0;
+
+    return float3(x, y, z);
+}
+
+float3 cyldv(float u, float v)
+{
+
+    float x = 0;
+    float z = 0;
+    float y = 1;
+
+    return float3(x, y, z);
+}
+
+float3 cylduu(float u, float v)
+{
+    float x =  -cos(u);
+    float z =  -sin(u);
+    float y = 0;
+
+    return float3(x, y, z);
+}
+float3 cylduv(float u, float v)
+{
+    float x = 0;
+    float z = 0;
+    float y = 0;
+
+    return float3(x, y, z);
+}
+
+float3 cyldvv(float u, float v)
+{
+    float x = 0;
+    float z = 0;
+    float y = 0;
+
+    return float3(x, y, z);
+}
+
+float3 coneP(float u, float v)
+{
+    float x = (v + boundingBox / 2.f) * cos(u);
+    float z = (v + boundingBox / 2.f) * sin(u);
+    float y = v;
+
+    return float3(x, y, z);
+}
+
+float3 conedu(float u, float v)
+{
+    float x = (v + boundingBox / 2.f) * -sin(u);
+    float z = (v + boundingBox / 2.f) * cos(u);
+    float y = 0;
+
+    return float3(x, y, z);
+}
+
+float3 conedv(float u, float v)
+{
+    float x = cos(u);
+    float z = sin(u);
+    float y = 1;
+
+    return float3(x, y, z);
+}
+
+float3 coneduu(float u, float v)
+{
+    float x = (v + boundingBox / 2.f) * -cos(u);
+    float z = (v + boundingBox / 2.f) * -sin(u);
+    float y = 0;
+
+    return float3(x, y, z);
+}
+
+float3 coneduv(float u, float v)
+{
+    float x =  -sin(u);
+    float z =  cos(u);
+    float y = 0;
+
+    return float3(x, y, z);
+}
+
+float3 conedvv(float u, float v)
+{
+    float x = 0;
+    float z = 0;
+    float y = 0;
 
     return float3(x, y, z);
 }
@@ -92,6 +188,12 @@ float3 mapP(float u, float v)
    #if SHAPE == 1
         return bezier(u, v);
     #endif
+#if SHAPE == 2
+    return cylP(u, v);
+    #endif
+    #if SHAPE == 3
+    return coneP(u, v);
+    #endif
     return float3(0, 0, 0);
 }
 
@@ -103,7 +205,12 @@ float3 getdu(float u, float v)
     #if SHAPE == 1
         return bezierdu(u, v);
     #endif
-
+    #if SHAPE == 2
+    return cyldu(u, v);
+    #endif
+     #if SHAPE == 3
+    return conedu(u, v);
+    #endif
     return float3(0, 0, 0);
 }
 
@@ -114,6 +221,12 @@ float3 getdv(float u, float v)
     #endif
     #if SHAPE == 1
         return bezierdv(u, v);
+    #endif
+    #if SHAPE == 2
+    return cyldv(u, v);
+    #endif
+     #if SHAPE == 3
+    return conedv(u, v);
     #endif
     return float3(0, 0, 0);
 }
@@ -126,6 +239,12 @@ float3 getduu(float u, float v)
     #if SHAPE == 1
         return bezierduu(u, v);
     #endif
+    #if SHAPE == 2
+    return cylduu(u, v);
+    #endif
+     #if SHAPE == 3
+    return coneduu(u, v);
+    #endif
     return float3(0, 0, 0);
 }
 
@@ -137,7 +256,12 @@ float3 getduv(float u, float v)
     #if SHAPE == 1
         return bezierduv(u, v);
     #endif
-    
+    #if SHAPE == 2
+    return cylduv(u, v);
+    #endif
+     #if SHAPE == 3
+    return coneduv(u, v);
+    #endif
     return float3(0, 0, 0);
 }
 
@@ -149,15 +273,29 @@ float3 getdvv(float u, float v)
     #if SHAPE == 1
         return bezierdvv(u, v);
     #endif
-    
+    #if SHAPE == 2
+    return cyldvv(u, v);
+    #endif
+     #if SHAPE == 3
+    return conedvv(u, v);
+    #endif
     return float3(0, 0, 0);
 }
 
 float2 convertParam(float u, float v)
 {
     #if SHAPE == 0
-    return float2(u * PI, v * 2 * PI);
+    return float2(u * PI, v * (2 * PI));
     #endif
+    #if SHAPE == 3
+    return float2(u * (2* PI), v *(float)boundingBox - boundingBox / 2.f);
+    #endif
+    #if SHAPE == 2
+    return float2(u * (2* PI), v * (float)boundingBox - boundingBox / 2.f);
+    #endif
+
+    return float2(u, v);
+
 }
 
 float3 getDifferenceP(float2 p1, float2 p2)

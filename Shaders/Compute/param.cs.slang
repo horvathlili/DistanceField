@@ -31,13 +31,24 @@ void main(uint2 threadId : SV_DispatchThreadID)
 
     float2 uv = getUV(threadId.x, threadId.y);
 
+    uv = convertParam(uv.x, uv.y);
+
     float3 p = mapP(uv.x, uv.y);
-    float3 n = getNormalP(uv.x, uv.y);
 
     float3 du = getdu(uv.x, uv.y);
     float3 dv = getdv(uv.x, uv.y);
 
-    n = normalize(cross(du, dv));
+
+    float3 n = normalize(cross(du, dv));
+
+    if (dv.x == 0 && dv.z == 0 && dv.y == 0)
+    {
+        n = float3(0, 1, 0);
+    }
+    if (du.x == 0 && du.z == 0 && du.y == 0)
+    {
+        n = float3(0, -1, 0);
+    }
     
     texp[threadId.xy] = p;
     texn[threadId.xy] = n;

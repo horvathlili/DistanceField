@@ -7,10 +7,19 @@ float2x2 inverse(float2x2 m)
 }
 
 
+float coneDist(float3 p)
+{
+
+    float2 c = float2(1, 0);
+   float2 q = float2(length(p.xz), -p.y);
+    float d = length(q - c * max(dot(q, c), 0.0));
+    return d * ((q.x * c.y - q.y * c.x < 0.0) ? -1.0 : 1.0);
+}
+
 
 float geomNewton(float3 pos)
 {
-    float2 t = float2(0.5, 0.5);
+    float2 t = float2(1, 1);
 
     for (int i = 0; i < 100; i++)
     {
@@ -22,7 +31,7 @@ float geomNewton(float3 pos)
 
         float2 b = float2(dot(pos - pn, du), dot(pos - pn, dv));
 
-        float2x2 A = float2x2(dot(du, du), dot(du, dv), dot(du, dv), dot(dv, dv));
+        float2x2 A = float2x2(dot(du, du), dot(du, dv), dot(dv, du), dot(dv, dv));
         
         float2 c = mul(inverse(A), b);
 
@@ -54,10 +63,14 @@ float geomNewton(float3 pos)
 float map(float3 pos)
 {
 #if SHAPE == 0
-    //return length(pos) - 1;
+    return abs(length(pos) - 1);
     return geomNewton(pos);
 #endif
 #if SHAPE == 1
+    return geomNewton(pos);
+
+#endif
+    #if SHAPE == 2
     return geomNewton(pos);
 
 #endif

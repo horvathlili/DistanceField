@@ -43,8 +43,8 @@ protected:
     //basic details of the distance field
     int resolution = 32;
     int sliderRes = 32;
-    float boundingBox = 2.f;
-    float sliderboundingBox = 2.f;
+    float boundingBox = 2.5f;
+    float sliderboundingBox = 2.5f;
     uint texturesize = 0;
 
     //textures of the field

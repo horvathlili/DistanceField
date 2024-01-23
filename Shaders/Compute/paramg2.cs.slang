@@ -37,10 +37,9 @@ void main(uint2 threadId : SV_DispatchThreadID)
 
     float2 uv = getUV(threadId.x, threadId.y);
 
-    float3 p = mapP(uv.x, uv.y);
-   
-
+    uv = convertParam(uv.x, uv.y);
     
+    float3 p = mapP(uv.x, uv.y);
 
     float e = 0.00001;
 
@@ -48,6 +47,12 @@ void main(uint2 threadId : SV_DispatchThreadID)
     float3 dv = getdv(uv.x, uv.y);
 
     float3 n = normalize(cross(du, dv));
+
+    if (dv.x == 0 && dv.z == 0 && dv.y == 0)
+    {
+        n = float3(0, 1, 0);
+        dv = cross(n, du);
+    }
 
     float3 duu = getduu(uv.x, uv.y);
     float3 dvv = getdvv(uv.x, uv.y);
