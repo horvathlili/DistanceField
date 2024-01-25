@@ -21,6 +21,7 @@ cbuffer csCb
     int m;
     int shape;
     float rs;
+    int nx;
 };
 
 
@@ -54,8 +55,9 @@ void main(uint2 threadId : SV_DispatchThreadID)
     {
 
         float3 pos = getQueryPoint(float3(threadId.xy, i));
-        error = abs(map(pos)- filter(pos));
-
+        
+        error = abs(map(pos) - abs(filter(pos)));
+        //error = map(pos);
         data1[threadId.x * testres * testres + threadId.y * testres + i] = error;
   
     }

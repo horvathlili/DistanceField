@@ -60,6 +60,8 @@ protected:
     uint field = 0;
     uint shape = 0;
 
+    int nx = 1; //it is 1 for normal shapes, for surfaces constructed from multiple bezeir surfaces it is the number of surfaces used
+
     ComputeProgramWrapper::SharedPtr testProgram;
     bool test = false;
     int testres = 10;

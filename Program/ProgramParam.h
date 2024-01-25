@@ -11,6 +11,7 @@ private:
     std::vector<Texture::SharedPtr> generateTexture(RenderContext* pRenderContext) override;
     virtual void testing(RenderContext* pRenderContext) override;
     void randomBezier();
+    void cubeBezier();
     void SetUpGui();
 
     Gui::RadioButtonGroup bg_min;
@@ -19,9 +20,10 @@ private:
 
     uint fieldb = 1;
 
-    int n = 5;
-    int m = 5;
+    int n = 1;
     std::vector<float3> bezier;
+    std::vector<float2> nm;
+    int bezierdb;
 
 public:
     void renderGui(Gui::Window* w) override;

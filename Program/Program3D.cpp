@@ -80,7 +80,10 @@ void Program3D::Render(RenderContext* pRenderContext, const Fbo::SharedPtr& pTar
         Vars["psCb"]["viewproj"] = camera->getViewProjMatrix();
         Vars["psCb"]["res"] = resolution;
         Vars["psCb"]["rs"] = rs;
+        Vars["psCb"]["nx"] = nx;
+        int interp = minm < 2 ? 0 : 1;
         Program->addDefine("MINM", std::to_string(minm));
+        Program->addDefine("INTERP", std::to_string(interp));
         Program->addDefine("FIELD", std::to_string(field));
         Program->addDefine("SHAPE", std::to_string(shape));
 

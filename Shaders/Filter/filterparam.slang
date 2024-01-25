@@ -4,6 +4,10 @@
 #define MINM 0
 #endif
 
+#ifndef INTERP
+#define INTERP 0
+#endif
+
 float planeDist(float3 pos, float3 p, float3 n)
 {
     float h = -dot(n, p);
@@ -36,24 +40,24 @@ float interp(float3 pos)
     
     float pp[4] = { 100, 100, 100, 100 };
 
-    for (int i = 0; i < res; i++)
+    for (int i = 0; i < nx* res; i++)
     {
         for (int j = 0; j < res; j++)
         {
             float3 p = texturep[float2(i, j)].xyz;
             float3 n = texturen[float2(i, j)].xyz;
 
-            float dist = abs(planeDist(pos, p, n));
+            float dist = -planeDist(pos, p, n);
 
 
            
             int k = 0;
-            while (k < 2 && pp[k] < length(p - pos))
+            while (k < 4 && pp[k] < length(p - pos))
             {
                 k++;
             }
 
-            if (k < 2)
+            if (k < 4)
             {
                 int l = 3;
 
@@ -73,23 +77,23 @@ float interp(float3 pos)
     float di = 0;
     float sum = 0;
 
-    for (int l = 0; l <2; l++)
+    for (int l = 0; l <4; l++)
     {
         di += d[ l];
-      
+        sum += pp[l];
 
     }
     
-        return di/4;
+    return abs(di / 4.f);
 }
 
-float filter(float3 pos)
+float nointerp(float3 pos)
 {
-    //return interp(pos);
+  // return interp(pos);
     float mind = 1000000;
     float3 minp = float3(10000);
 
-    for (int i = 0; i < res; i++)
+    for (int i = 0; i < nx*res; i++)
     {
         for (int j = 0; j < res; j++)
         {
@@ -99,7 +103,7 @@ float filter(float3 pos)
             float d = max(abs(planeDist(pos, p, n)), sphereDist(pos, p, rs));
 
 #if MINM == 1
-            if (  ( length(pos - minp) >= length(pos - p)))
+            if (  ( length(pos - minp) > length(pos - p)))
             {
                 mind = d;
                 minp = p;
@@ -111,12 +115,25 @@ float filter(float3 pos)
                 mind = d;
                 minp = p;
             }
+
+          
 #endif
         }
     }
 
     return mind;
 
+}
+
+float filter(float3 pos)
+{
+    #if INTERP == 0
+    return nointerp(pos);
+    #endif
+    #if INTERP == 1
+    return interp(pos);
+#endif
+    return 1;
 }
 
 

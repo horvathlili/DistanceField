@@ -4,6 +4,11 @@
 #define MINM 0
 #endif
 
+#ifndef INTERP
+#define INTERP 0
+#endif
+
+
 float planeDist(float3 pos, float3 p, float3 n)
 {
     float h = -dot(n, p);
@@ -110,7 +115,7 @@ float filter(float3 pos)
     float mind = 1000000;
     float3 minp = float3(10000);
 
-    for (int i =0; i < res; i++)
+    for (int i =0; i < nx*res; i++)
     {
         for (int j = 0; j <res; j++)
         {
@@ -121,7 +126,7 @@ float filter(float3 pos)
             float kr = texturep[float2(i, j)].w;
             float kR = texturen[float2(i, j)].w;
             
-            float d = max(abs(getTorusDist(pos, p, t, n, kr, kR)) ,sphereDist(pos, p, rs));
+            float d = max(abs(getTorusDist(pos, p, t, n, kr, kR)), sphereDist(pos, p, rs));
 
 #if MINM == 1
             if (  ( length(pos - minp) >= length(pos - p)))

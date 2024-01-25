@@ -23,6 +23,7 @@ cbuffer psCb
     bool box;
     float rs;
     int minm;
+    int nx;
 };
 
 Texture2D texturep;

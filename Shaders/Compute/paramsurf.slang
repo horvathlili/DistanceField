@@ -1,8 +1,8 @@
 #pragma once
 
-#define PI 3.1415
+#define PI 3.14159265359
 
-#include "bezier.slang"
+#include "../../beziers.slang"
 
 #ifndef SHAPE
 #define SHAPE 0
@@ -186,7 +186,9 @@ float3 mapP(float u, float v)
     #endif
    
    #if SHAPE == 1
-        return bezier(u, v);
+    int k = (int)u;
+    u = u-k;
+        return bezier(u, v,k);
     #endif
 #if SHAPE == 2
     return cylP(u, v);
@@ -203,7 +205,9 @@ float3 getdu(float u, float v)
     return spheredu(u, v);
     #endif
     #if SHAPE == 1
-        return bezierdu(u, v);
+     int k = (int)u;
+    u = u-k;
+        return bezierdu(u, v,k);
     #endif
     #if SHAPE == 2
     return cyldu(u, v);
@@ -220,7 +224,9 @@ float3 getdv(float u, float v)
     return spheredv(u, v);
     #endif
     #if SHAPE == 1
-        return bezierdv(u, v);
+     int k = (int)u;
+    u = u-k;
+        return bezierdv(u, v,k);
     #endif
     #if SHAPE == 2
     return cyldv(u, v);
@@ -237,7 +243,9 @@ float3 getduu(float u, float v)
     return sphereduu(u, v);
     #endif
     #if SHAPE == 1
-        return bezierduu(u, v);
+     int k = (int)u;
+    u = u-k;
+        return bezierduu(u, v,k);
     #endif
     #if SHAPE == 2
     return cylduu(u, v);
@@ -254,7 +262,9 @@ float3 getduv(float u, float v)
     return sphereduv(u, v);
     #endif
     #if SHAPE == 1
-        return bezierduv(u, v);
+     int k = (int)u;
+    u = u-k;
+        return bezierduv(u, v,k);
     #endif
     #if SHAPE == 2
     return cylduv(u, v);
@@ -271,7 +281,9 @@ float3 getdvv(float u, float v)
     return spheredvv(u, v);
     #endif
     #if SHAPE == 1
-        return bezierdvv(u, v);
+     int k = (int)u;
+    u = u-k;
+        return bezierdvv(u, v,k);
     #endif
     #if SHAPE == 2
     return cyldvv(u, v);
@@ -286,6 +298,9 @@ float2 convertParam(float u, float v)
 {
     #if SHAPE == 0
     return float2(u * PI, v * (2 * PI));
+    #endif
+#if SHAPE == 1
+    return float2(u, v);
     #endif
     #if SHAPE == 3
     return float2(u * (2* PI), v *(float)boundingBox - boundingBox / 2.f);

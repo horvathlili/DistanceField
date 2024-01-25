@@ -28,6 +28,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <ShaderSource Include="beziers.slang" />
     <ShaderSource Include="Shaders\3d.ps.slang" />
     <ShaderSource Include="Shaders\3d.vs.slang" />
     <ShaderSource Include="Shaders\Compute\bezier.slang" />

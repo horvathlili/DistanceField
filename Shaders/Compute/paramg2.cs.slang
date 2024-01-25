@@ -12,7 +12,7 @@ cbuffer csCb
     float boundingBox;
     int shape;
     int n;
-    int m;
+    int nx;
 };
 
 float2 getUV(float x, float y)
@@ -32,7 +32,7 @@ void main(uint2 threadId : SV_DispatchThreadID)
 {
     
     
-    if (any(threadId.xy >= float2(res)))
+    if (any(threadId.xy >= float2(nx*res)))
         return;
 
     float2 uv = getUV(threadId.x, threadId.y);

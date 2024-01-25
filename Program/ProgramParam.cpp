@@ -11,9 +11,14 @@ void ProgramParam::SetUpGui() {
     min2.label = "footpoint";
     min2.buttonID = 1;
     min2.sameLine = true;
+    Gui::RadioButton interp;
+    interp.label = "interpolation";
+    interp.buttonID = 2;
+    interp.sameLine = true;
 
     bg_min.push_back(min1);
     bg_min.push_back(min2);
+    bg_min.push_back(interp);
 
     Gui::RadioButton g1;
     g1.label = "g1";
@@ -72,18 +77,108 @@ float bernstein(float n, float i, float u)
 
 void ProgramParam::randomBezier() {
 
-    bezier.resize((n+1) * (m+1));
+    n = 1;
+    nm.push_back(float2(5, 5));
 
-    for (int i = 0; i <= n; i++) {
-        for (int j = 0; j <= m; j++) {
-            //bezier[i * m + j] = float3(i / (float)n, 0.5, j / (float)m);
-            bezier[i * (m+1) + j] = float3(i / (float)n * boundingBox - boundingBox/2.f, rand()/(float)RAND_MAX, j / (float)m * boundingBox - boundingBox / 2.f);
+    for (int i = 0; i < n; i++) {
+        bezierdb += (int)(nm[i].x + 1) * (int)(nm[i].y + 1);
+    }
+
+    bezier.resize(bezierdb);
+
+    float db = 0;
+
+    for (int l = 0; l < n; l++) {
+
+        for (int i = 0; i <= nm[0].x; i++) {
+            for (int j = 0; j <= nm[0].y; j++) {
+                //bezier[i * m + j] = float3(i / (float)n, 0.5, j / (float)m);
+                bezier[(int)db + i * (int)(nm[0].y + 1) + j] = float3(i / (float)5 * boundingBox - boundingBox / 2.f, rand() / (float)RAND_MAX, j / (float)5 * boundingBox - boundingBox / 2.f);
+            }
         }
+
+        db += (nm[l].x + 1) * (nm[l].y + 1);
     }
 
    /* for (int i = 0; i < n * m; i++) {
         std::cout << bezier[i].x <<" " << bezier[i].y << " " << bezier[i].z << " " << std::endl;
     }*/
+
+}
+
+void ProgramParam::cubeBezier() {
+
+    n = 6;
+    nm.push_back(float2(1, 1));
+    nm.push_back(float2(1, 1));
+    nm.push_back(float2(1, 1));
+    nm.push_back(float2(1, 1));
+    nm.push_back(float2(1, 1));
+    nm.push_back(float2(1, 1));
+
+    for (int i = 0; i < n; i++) {
+        bezierdb += (int)(nm[i].x + 1) * (int)(nm[i].y + 1);
+    }
+
+    bezier.resize(bezierdb);
+
+    float db = 0;
+
+    
+        for (int i = 0; i <= nm[0].x; i++) {
+            for (int j = 0; j <= nm[0].y; j++) {
+                //bezier[i * m + j] = float3(i / (float)n, 0.5, j / (float)m);
+                bezier[(int)db + i * (int)(nm[0].y + 1) + j] = float3(-0.5 + i, -0.5, -0.5 + j);
+            }
+        }
+
+        db += (nm[0].x + 1) * (nm[0].y + 1);
+
+        for (int i = 0; i <= nm[1].x; i++) {
+            for (int j = 0; j <= nm[1].y; j++) {
+                //bezier[i * m + j] = float3(i / (float)n, 0.5, j / (float)m);
+                bezier[(int)db + i * (int)(nm[1].y + 1) + j] = float3(-0.5 + i,-0.5 + j,-0.5);
+            }
+        }
+
+        db += (nm[1].x + 1) * (nm[1].y + 1);
+
+        for (int i = 0; i <= nm[2].x; i++) {
+            for (int j = 0; j <= nm[2].y; j++) {
+                //bezier[i * m + j] = float3(i / (float)n, 0.5, j / (float)m);
+                bezier[(int)db + i * (int)(nm[2].y + 1) + j] = float3(-0.5,-0.5 + i, -0.5 + j);
+            }
+        }
+
+        db += (nm[1].x + 1) * (nm[1].y + 1);
+
+        for (int i = 0; i <= nm[2].x; i++) {
+            for (int j = 0; j <= nm[2].y; j++) {
+                //bezier[i * m + j] = float3(i / (float)n, 0.5, j / (float)m);
+                bezier[(int)db + i * (int)(nm[2].y + 1) + j] = float3(+0.5, -0.5 + i, -0.5 + j);
+            }
+        }
+        db += (nm[1].x + 1) * (nm[1].y + 1);
+
+        for (int i = 0; i <= nm[2].x; i++) {
+            for (int j = 0; j <= nm[2].y; j++) {
+                //bezier[i * m + j] = float3(i / (float)n, 0.5, j / (float)m);
+                bezier[(int)db + i * (int)(nm[2].y + 1) + j] = float3( -0.5 + i, -0.5 + j,+0.5);
+            }
+        }
+        db += (nm[1].x + 1) * (nm[1].y + 1);
+
+        for (int i = 0; i <= nm[2].x; i++) {
+            for (int j = 0; j <= nm[2].y; j++) {
+                //bezier[i * m + j] = float3(i / (float)n, 0.5, j / (float)m);
+                bezier[(int)db + i * (int)(nm[2].y + 1) + j] = float3( -0.5 + i,+0.5, -0.5 + j);
+            }
+        }
+
+
+    /* for (int i = 0; i < n * m; i++) {
+         std::cout << bezier[i].x <<" " << bezier[i].y << " " << bezier[i].z << " " << std::endl;
+     }*/
 
 }
 
@@ -111,13 +206,17 @@ void ProgramParam::testing(RenderContext* pRenderContext) {
     comp["csCb"]["boundingBox"] = boundingBox;
     comp["csCb"]["res"] = resolution;
     comp["csCb"]["n"] = n;
-    comp["csCb"]["m"] = m;
+    comp["csCb"]["nx"] = nx;
     comp["csCb"]["shape"] = shape;
     comp["csCb"]["rs"] = rs;
     comp.getProgram()->addDefine("FIELD", std::to_string(field));
-    comp.getProgram()->addDefine("MINM", std::to_string(minm));
+    int interp = minm < 2 ? 0 : 1;
+    Program->addDefine("MINM", std::to_string(minm));
+    Program->addDefine("INTERP", std::to_string(interp));
     comp.getProgram()->addDefine("SHAPE", std::to_string(shape));
     comp.allocateStructuredBuffer("data1", testres*testres*testres);
+    comp.allocateStructuredBuffer("b", bezierdb, bezier.data(), sizeof(float3) * bezierdb);
+    comp.allocateStructuredBuffer("nm", n, nm.data(), sizeof(float2) * n);
 
 
     comp.runProgram(pRenderContext, testres, testres);
@@ -133,6 +232,8 @@ void ProgramParam::testing(RenderContext* pRenderContext) {
     float avg = 0;
     for (int i = 0; i < testres * testres * testres; i++) {
         avg += data1[i];
+
+        std::cout << data1[i] << std::endl;
     }
 
     std::cout << avg / (float)(testres * testres * testres) << std::endl;
@@ -179,10 +280,16 @@ std::vector<Texture::SharedPtr> ProgramParam::generateTexture(RenderContext* pRe
         ComputeProgram->createProgram("Samples/DistanceField/Shaders/Compute/paramg2.cs.slang");
     }
 
+    nx = 1;
+    if (shape == 1) {
+        nx = n;
+    }
 
-    pTexp = Texture::create2D(resolution, resolution, format, 1, 1, nullptr, ResourceBindFlags::ShaderResource | ResourceBindFlags::UnorderedAccess);
-    pTexn = Texture::create2D(resolution, resolution, format, 1, 1, nullptr, ResourceBindFlags::ShaderResource | ResourceBindFlags::UnorderedAccess);
-    pTex3 = Texture::create2D(resolution, resolution, format, 1, 1, nullptr, ResourceBindFlags::ShaderResource | ResourceBindFlags::UnorderedAccess);
+    std::cout << nx << std::endl;
+
+    pTexp = Texture::create2D(nx*resolution, resolution, format, 1, 1, nullptr, ResourceBindFlags::ShaderResource | ResourceBindFlags::UnorderedAccess);
+    pTexn = Texture::create2D(nx*resolution, resolution, format, 1, 1, nullptr, ResourceBindFlags::ShaderResource | ResourceBindFlags::UnorderedAccess);
+    pTex3 = Texture::create2D(nx*resolution, resolution, format, 1, 1, nullptr, ResourceBindFlags::ShaderResource | ResourceBindFlags::UnorderedAccess);
 
     auto& comp = *ComputeProgram;
 
@@ -192,26 +299,27 @@ std::vector<Texture::SharedPtr> ProgramParam::generateTexture(RenderContext* pRe
     comp["csCb"]["res"] = resolution;
     comp["csCb"]["boundingBox"] = boundingBox;
     comp.getProgram()->addDefine("SHAPE", std::to_string(shape));
-    comp.allocateStructuredBuffer("data1", resolution *  resolution);
-    comp.allocateStructuredBuffer("b", (n+1)*(m+1), bezier.data(), sizeof(float3) * (n + 1) * (m + 1));
+    comp.allocateStructuredBuffer("data1", nx*resolution *  resolution);
+    comp.allocateStructuredBuffer("b", bezierdb, bezier.data(), sizeof(float3) * bezierdb);
+    comp.allocateStructuredBuffer("nm", n, nm.data(), sizeof(float2) * n);
     comp["csCb"]["shape"] = shape;
     comp["csCb"]["n"] = n;
-    comp["csCb"]["m"] = m;
+    comp["csCb"]["nx"] = nx;
 
-    comp.runProgram(pRenderContext, resolution, resolution);
+    comp.runProgram(pRenderContext, nx*resolution, resolution);
 
     std::vector<float4> data1;
 
     auto dataptr = comp.mapBuffer<const float4>("data1");
-    data1.resize(resolution * resolution);
-    data1.assign(dataptr, dataptr + resolution * resolution);
+    data1.resize(nx*resolution * resolution);
+    data1.assign(dataptr, dataptr + nx*resolution * resolution);
     comp.unmapBuffer("data1");
 
    
 
-    for (int i = 0; i < resolution * resolution; i++) {
+    /*for (int i = 0; i < resolution * resolution; i++) {
         std::cout << data1[i].x << " " << data1[i].y <<" "<<data1[i].z<< std::endl;
-    }
+    }*/
   
     std::vector<Texture::SharedPtr> textures;
     textures.push_back(pTexp);

@@ -81,5 +81,8 @@
     <ShaderSource Include="Shaders\Compute\test.cs.slang">
       <Filter>Shaders\Compute</Filter>
     </ShaderSource>
+    <ShaderSource Include="beziers.slang">
+      <Filter>Shaders\Compute</Filter>
+    </ShaderSource>
   </ItemGroup>
 </Project>
