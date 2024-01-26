@@ -2,7 +2,7 @@
 
 #define PI 3.14159265359
 
-#include "../../beziers.slang"
+#include "../Utils/beziers.slang"
 
 #ifndef SHAPE
 #define SHAPE 0

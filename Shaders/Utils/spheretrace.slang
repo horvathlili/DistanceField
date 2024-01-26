@@ -36,7 +36,7 @@ float4 sphereTrace(float3 pixelpos)
        
         h = filter(pos);
        
-        if (h < 0.0001 || isOutOfBox(pos))
+        if (h < 0.001 || isOutOfBox(pos))
             break;
         t += h;
     }

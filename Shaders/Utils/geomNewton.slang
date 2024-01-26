@@ -1,37 +1,20 @@
 #include "../Compute/paramsurf.slang"
 
-float2x2 inverse(float2x2 m)
-{
-    return float2x2(m[1][1], -m[0][1],
-             -m[1][0], m[0][0]) / (m[0][0] * m[1][1] - m[0][1] * m[1][0]);
-}
-
-
-float coneDist(float3 p)
-{
-
-    float2 c = float2(1, 0);
-   float2 q = float2(length(p.xz), -p.y);
-    float d = length(q - c * max(dot(q, c), 0.0));
-    return d * ((q.x * c.y - q.y * c.x < 0.0) ? -1.0 : 1.0);
-}
-
-
-float geomNewton(float3 pos)
+float2 geomNewton(float3 pos)
 {
     float2 t;
 
     t = convertParam(0.5, 0.5);
-    
+
     float d = 10000;
-    //now only works for 1 surface (for multiple all patches have to be handled separately)
-    for (int i = 0; i < 20; i++)
+
+    for (int i = 0; i <= 20; i++)
     {
-        for (int j = 0; j < 20; j++)
+        for (int j = 0; j <= 20; j++)
         {
 
             float2 cc = convertParam(i / 20.f, j / 20.f);
-            if (length(mapP(cc.x, cc.y) - pos) < d)
+            if (length(mapP(cc.x,cc.y) - pos) < d)
             {
                 t = cc;
                 d = length(mapP(cc.x, cc.y) - pos);
@@ -41,9 +24,11 @@ float geomNewton(float3 pos)
         }
     }
 
-    int i = 0;
+    //now only works for 1 surface (for multiple all patches have to be handled separately)
+
+        int i = 0;
     bool end = false;
-    while(i  < 100 && !end )
+    while (i < 100 && !end)
     {
 
         float3 du = getdu(t.x, t.y);
@@ -83,7 +68,8 @@ float geomNewton(float3 pos)
         
         float al = 1 - (a0 + a1 + a2 + a3) / (a1 + 2 * a2 + 3 * a3);
 
-        if (al > 0 && al < 20){
+        if (al > 0 && al < 20)
+        {
             t.x = t.x + al * c.x;
             t.y = t.y + al * c.y;
         }
@@ -91,26 +77,6 @@ float geomNewton(float3 pos)
         i++;
 
     }
+    return t;
 
-    float3 pn = mapP(t.x, t.y);
-
-    return length(pos - pn);
-
-}
-
-float map(float3 pos)
-{
-#if SHAPE == 0
-    //return abs(length(pos) - 1);
-    return geomNewton(pos);
-#endif
-#if SHAPE == 1
-    return geomNewton(pos);
-
-#endif
-    #if SHAPE == 2
-    return geomNewton(pos);
-
-#endif
-    return 0;
 }

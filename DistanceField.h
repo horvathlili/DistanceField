@@ -27,6 +27,7 @@
  **************************************************************************/
 #pragma once
 #include "Falcor.h"
+#include "Program/ProgramParam3D.h"
 #include "Program/ProgramParam.h"
 
 
@@ -65,5 +66,10 @@ private:
 
     DebugConsole console;
 
-    ProgramParam programP;
+    ProgramParam3D programP;
+    ProgramParam programP2d;
+
+    uint programid = 0;
+
+    Gui::RadioButtonGroup bg_field;
 };

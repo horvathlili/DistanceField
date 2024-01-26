@@ -1,4 +1,16 @@
+#ifndef FIELD
+#define FIELD 1
+#endif
 
+#if FIELD == 1
+    #include "Filter/filterparam.slang"
+#endif
+#if FIELD == 2
+    #include "Filter/filterparamg2.slang"
+#endif
+
+#include "Utils/ray.slang"
+#include "Utils/spheretrace.slang"
 
 cbuffer psCb
 {
@@ -15,9 +27,9 @@ cbuffer psCb
     int nx;
 };
 
-#include "includes.slang"
-#include "Utils/ray.slang"
-#include "Utils/spheretrace.slang"
+Texture2D texturep;
+Texture2D texturen;
+Texture2D texture3;
 
 struct psIn
 {

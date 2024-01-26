@@ -11,6 +11,9 @@
     <ClCompile Include="Program\ProgramParam.cpp">
       <Filter>Program</Filter>
     </ClCompile>
+    <ClCompile Include="Program\ProgramParam3D.cpp">
+      <Filter>Program</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DistanceField.h" />
@@ -21,6 +24,9 @@
       <Filter>Program</Filter>
     </ClInclude>
     <ClInclude Include="Program\ProgramParam.h">
+      <Filter>Program</Filter>
+    </ClInclude>
+    <ClInclude Include="Program\ProgramParam3D.h">
       <Filter>Program</Filter>
     </ClInclude>
   </ItemGroup>
@@ -81,8 +87,29 @@
     <ShaderSource Include="Shaders\Compute\test.cs.slang">
       <Filter>Shaders\Compute</Filter>
     </ShaderSource>
-    <ShaderSource Include="beziers.slang">
+    <ShaderSource Include="Shaders\Compute\param3Dg1.cs.slang">
       <Filter>Shaders\Compute</Filter>
+    </ShaderSource>
+    <ShaderSource Include="Shaders\Compute\param3Dg2.cs.slang">
+      <Filter>Shaders\Compute</Filter>
+    </ShaderSource>
+    <ShaderSource Include="Shaders\Utils\geomNewton.slang">
+      <Filter>Shaders\Utils</Filter>
+    </ShaderSource>
+    <ShaderSource Include="Shaders\Filter\filterparam3Dg1.slang">
+      <Filter>Shaders\Filter</Filter>
+    </ShaderSource>
+    <ShaderSource Include="Shaders\Filter\filterparam3Dg2.slang">
+      <Filter>Shaders\Filter</Filter>
+    </ShaderSource>
+    <ShaderSource Include="Shaders\2d.ps.slang">
+      <Filter>Shaders</Filter>
+    </ShaderSource>
+    <ShaderSource Include="Shaders\Utils\beziers.slang">
+      <Filter>Shaders\Utils</Filter>
+    </ShaderSource>
+    <ShaderSource Include="Shaders\includes.slang">
+      <Filter>Shaders</Filter>
     </ShaderSource>
   </ItemGroup>
 </Project>

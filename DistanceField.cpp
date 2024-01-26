@@ -10,101 +10,6 @@ uint32_t mSampleGuiPositionX = 20;
 uint32_t mSampleGuiPositionY = 40;
 
 
-float3 mapP(float u, float v)
-{
-
-    float x = sin(u) * cos(v);
-    float y = cos(u);
-    float z = sin(u) * sin(v);
-
-    return float3(x, y, z);
-
-}
-
-float3 getdu(float u, float v)
-{
-
-    float x = cos(u) * cos(v);
-    float y = -sin(u);
-    float z = cos(u) * sin(v);
-
-    return float3(x, y, z);
-}
-
-float3 getdv(float u, float v)
-{
-
-    float x = sin(u) * -sin(v);
-    float y = 0;
-    float z = sin(u) * cos(v);
-
-    return float3(x, y, z);
-}
-
-
-float geomNewton(float3 pos)
-{
-    float2 t = float2(rand()/(float)RAND_MAX*10,rand() / (float)RAND_MAX*10);
-
-
-    for (int i = 0; i < 100; i++)
-    {
-
-        float3 du = getdu(t.x, t.y);
-        float3 dv = getdv(t.x, t.y);
-
-        float3 pn = mapP(t.x, t.y);
-
-        float2 b = float2(dot(pos - pn, du), dot(pos - pn, dv));
-
-        float4 A = float4(dot(du, du), dot(du, dv), dot(dv, du), dot(dv, dv));
-
-        float X = 1.f / (float)(A.x * A.w - A.y * A.z);
-
-        float2 c = float2(0);
-
-        c.x = X * (A.w * b.x - A.y * b.y);
-        c.y = X * (A.x * b.y - A.y * b.x);
-
-        //std::cout << c.x << " " << c.y << std::endl;
-
-        float3 qn = pn + c.x * du + c.y * dv;
-        float3 pn1 = mapP(t.x + c.x, t.y + c.y);
-
-        float3 f1 = qn - pn;
-        float3 f2 = pn1 - qn;
-
-        float a0 = dot(pos - pn, f1);
-        float a1 = dot(pos - pn, 2.f * f2) - dot(f1, f1);
-        float a2 = dot(-3.f * f1, f2);
-        float a3 = -2 * dot(f2, f2);
-        float al = 1 - (a0 + a1 + a2 + a3) / (a1 + 2 * a2 + 3 * a3);
-
-        if (al > 0 && al < 20) {
-            t.x = t.x + al * c.x;
-            t.y = t.y + al * c.y;
-        }
-
-    }
-
-    float3 pn = mapP(t.x, t.y);
-
-    //std::cout << pn.x << " " << pn.y << " " << pn.z << std::endl;
-
-    return length(pos - pn);
-
-}
-
-float3 getQueryPoint(float3 p)
-{
-    float3 pos = float3(-(float)2.5f / 2.0);
-    pos.x += (float)2.5f / (float)3.f * (p.x + 0.5f);
-    pos.y += (float)2.5f / (float)3.f * (p.y + 0.5f);
-    pos.z += (float)2.5f / (float)3.f * (p.z + 0.5f);
-
-    return pos;
-}
-
 void DistanceField::initPlane() {
 
     const Vertex vertices[] =
@@ -132,6 +37,7 @@ void DistanceField::initPlane() {
     FALCOR_ASSERT(pVao);
 
     programP.setVao(pVbo, pVao);
+    programP2d.setVao(pVbo, pVao);
    
 }
 
@@ -200,6 +106,7 @@ void DistanceField::initBox() {
     FALCOR_ASSERT(cubeVao);
 
     programP.setCubeVao(cubeVbo, cubeVao);
+    programP2d.setCubeVao(cubeVbo, cubeVao);
   
 }
 void DistanceField::initCamera() {
@@ -217,13 +124,22 @@ void DistanceField::initCamera() {
     cameraControl->setCameraSpeed(1.0f);
 
    programP.setCamera(camera, cameraControl);
+   programP2d.setCamera(camera, cameraControl);
      
 }
 
 void DistanceField::onGuiRender(Gui* pGui)
 {
     Gui::Window w(pGui, "Field", { 500, 360 }, { 10, 10 });
-    programP.renderGui(&w);
+
+    w.radioButtons(bg_field, programid);
+
+    if (programid == 0) {
+        programP.renderGui(&w);
+    }
+    if (programid == 1) {
+        programP2d.renderGui(&w);
+    }
 }
 
 void DistanceField::onLoad(RenderContext* pRenderContext)
@@ -232,19 +148,17 @@ void DistanceField::onLoad(RenderContext* pRenderContext)
 
     initCamera();
 
+    Gui::RadioButton param2d;
+    param2d.label = "parametric surface 2d data";
+    param2d.buttonID = 1;
+    param2d.sameLine = false;
+    Gui::RadioButton param3d;
+    param3d.label = "parametric surface 3d data";
+    param3d.buttonID = 0;
+    param3d.sameLine = true;
 
-    for (int i = 0; i < 3; i++) {
-        for (int j = 0; j < 3; j++) {
-            for (int k = 0; k < 3; k++) {
-
-                float3 pos = getQueryPoint(float3(i, j, k));
-
-                std::cout << pos.x << " " << pos.y << " " << pos.z << std::endl;
-                std::cout<<geomNewton(pos)<<std::endl;
-                std::cout << glm::length(pos) - 1 << std::endl;
-            }
-        }
-    }
+    bg_field.push_back(param2d);
+    bg_field.push_back(param3d);
    
 }
 
@@ -254,8 +168,13 @@ void DistanceField::onFrameRender(RenderContext* pRenderContext, const Fbo::Shar
     pRenderContext->clearFbo(pTargetFbo.get(), clearColor, 1.0f, 0, FboAttachmentType::All);
 
     programP.cameraControl->update();
-
-    programP.Render(pRenderContext, pTargetFbo);
+    programP2d.cameraControl->update();
+    if (programid == 0) {
+        programP.Render(pRenderContext, pTargetFbo);
+    }
+    if (programid == 1) {
+        programP2d.Render(pRenderContext, pTargetFbo);
+    }
 }
 
 void DistanceField::onShutdown()

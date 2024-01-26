@@ -14,12 +14,14 @@
     <ClCompile Include="DistanceField.cpp" />
     <ClCompile Include="Program\Program3D.cpp" />
     <ClCompile Include="Program\ProgramParam.cpp" />
+    <ClCompile Include="Program\ProgramParam3D.cpp" />
     <ClCompile Include="Utils\ComputeProgramWrapper.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DistanceField.h" />
     <ClInclude Include="Program\Program3D.h" />
     <ClInclude Include="Program\ProgramParam.h" />
+    <ClInclude Include="Program\ProgramParam3D.h" />
     <ClInclude Include="Utils\ComputeProgramWrapper.h" />
   </ItemGroup>
   <ItemGroup>
@@ -28,16 +30,23 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <ShaderSource Include="beziers.slang" />
+    <ShaderSource Include="Shaders\2d.ps.slang" />
     <ShaderSource Include="Shaders\3d.ps.slang" />
     <ShaderSource Include="Shaders\3d.vs.slang" />
     <ShaderSource Include="Shaders\Compute\bezier.slang" />
     <ShaderSource Include="Shaders\Compute\param.cs.slang" />
+    <ShaderSource Include="Shaders\Compute\param3Dg1.cs.slang" />
+    <ShaderSource Include="Shaders\Compute\param3Dg2.cs.slang" />
     <ShaderSource Include="Shaders\Compute\paramg2.cs.slang" />
     <ShaderSource Include="Shaders\Compute\paramsurf.slang" />
     <ShaderSource Include="Shaders\Compute\test.cs.slang" />
     <ShaderSource Include="Shaders\Filter\filterparam.slang" />
+    <ShaderSource Include="Shaders\Filter\filterparam3Dg1.slang" />
+    <ShaderSource Include="Shaders\Filter\filterparam3Dg2.slang" />
     <ShaderSource Include="Shaders\Filter\filterparamg2.slang" />
+    <ShaderSource Include="Shaders\includes.slang" />
+    <ShaderSource Include="Shaders\Utils\beziers.slang" />
+    <ShaderSource Include="Shaders\Utils\geomNewton.slang" />
     <ShaderSource Include="Shaders\Utils\param.slang" />
     <ShaderSource Include="Shaders\Utils\ray.slang" />
     <ShaderSource Include="Shaders\Utils\spheretrace.slang" />

@@ -1,0 +1,21 @@
+(Error) Failed to link program:
+Samples/DistanceField/Shaders/3d.vs.slang(main) Samples/DistanceField/Shaders/3d.ps.slang(main)
+
+C:/tdk/Falcor/Source/Samples/DistanceField/Shaders/includes.slang(12): error 15300: failed to find include file 'Shaders/Filter/filterparam3Dg1.slang'
+#include "Shaders/Filter/filterparam3Dg1.slang"
+         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+(Error) Failed to link program:
+Samples/DistanceField/Shaders/Compute/param3Dg2.cs.slang(main)
+
+C:/tdk/Falcor/Source/Samples/DistanceField/Shaders/Compute/paramsurf.slang(5): error 15300: failed to find include file '../../beziers.slang'
+#include "../../beziers.slang"
+         ^~~~~~~~~~~~~~~~~~~~~
+
+(Error) Failed to link program:
+Samples/DistanceField/Shaders/Compute/test.cs.slang(main)
+
+C:\tdk\Falcor\Source\Samples\DistanceField\Shaders\Compute\test.cs.slang(1): error 15300: failed to find include file '../../includes.slang'
+#include "../../includes.slang"
+         ^~~~~~~~~~~~~~~~~~~~~~
+
