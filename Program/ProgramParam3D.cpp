@@ -157,7 +157,7 @@ ProgramParam3D::ProgramParam3D() {
     testProgram->createProgram("Samples/DistanceField/Shaders/Compute/test.cs.slang");
 
     SetUpGui();
-    randomBezier();
+    cubeBezier();
 
     dim = 3;
 }

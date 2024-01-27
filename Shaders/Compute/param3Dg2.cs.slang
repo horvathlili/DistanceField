@@ -31,8 +31,21 @@ void main(uint3 threadId : SV_DispatchThreadID)
     pos.y += (float) boundingBox / (float) res * (threadId.y + 0.5);
     pos.z += (float) boundingBox / (float) res * (threadId.z + 0.5);
 
+    float2 uv;
+    float mind = 1000000;
 
-    float2 uv = geomNewton(pos);
+    for (int i = 0; i < nx; i++)
+    {
+    
+        float2 uvt = geomNewton(pos, i);
+        float3 p = mapP(uvt.x + i, uvt.y);
+
+        if (length(p - pos) < mind)
+        {
+            mind = length(p - pos);
+            uv = float2(uvt.x + i, uvt.y);
+        }
+    }
 
     float3 p = mapP(uv.x, uv.y);
 

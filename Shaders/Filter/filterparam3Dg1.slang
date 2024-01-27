@@ -90,13 +90,424 @@ float trilinear(float3 pos)
 
 }
 
+float opSmoothIntersection
+    (
+    float d1, float d2, float k)
+{
+    float h = clamp(0.5 - 0.5 * (d2 - d1) / k, 0.0, 1.0);
+   // return lerp(d2, d1, h) + k * h * (1.0 - h);
+
+    return max(d1, d2);
+}
+
+float opSmoothUnion
+    (
+    float d1, float d2, float k)
+{
+    return min(d1, d2);
+    return -opSmoothIntersection(-d1, -d2, k);
+}
+
+
+
+int4 tetrav(float3 p)
+{
+ 
+    if (p.y <= p.z && p.z <= p.x)
+    {
+        return int4(0, 1, 2, 6);
+    }
+    if (p.z < p.y && p.y <= p.x)
+    {
+        return int4(0, 1, 5, 6);
+    }
+    if (p.z <= p.x && p.x <= p.y)
+    {
+        return int4(0, 4, 5, 6);
+
+    }
+    if (p.y <= p.x && p.x <= p.z)
+    {
+       
+        return int4(0, 2, 3, 6);
+    }
+    if (p.x <= p.y && p.y <= p.z)
+    {
+       
+        return int4(0, 3, 7, 6);
+    }
+    if (p.x <= p.z && p.z <= p.y)
+    {
+       
+        return int4(0, 4, 7, 6);
+    }
+
+    return int4(0, 0, 0, 0);
+}
+
+float csg2(float3 p)
+{
+    float3 p1 = ((p) / float3(boundingBox) + 0.5);
+    
+    float3 fuvw = clamp(p1 * (float(res)) - 0.5, 0, float(res) - 1);
+    int3 uvw = clamp(fuvw, 0, res - 2);
+   
+    float3 pp[8];
+
+    pp[0] = float3(0, 0, 0);
+    pp[1] = float3(1, 0, 0);
+    pp[2] = float3(1, 0, 1);
+    pp[3] = float3(0, 0, 1);
+    pp[4] = float3(0, 1, 0);
+    pp[5] = float3(1, 1, 0);
+    pp[6] = float3(1, 1, 1);
+    pp[7] = float3(0, 1, 1);
+
+    int4 ix = tetrav(fuvw - int3(uvw));
+    
+    float3 fp[4];
+    float3 n[4], n2[4];
+    float conv[4];
+    fp[0] = texturep[uvw + pp[ix.r]].xyz;
+    n[0] = -texturen[uvw + pp[ix.r]].xyz;
+    n2[0] = texturen[uvw + pp[ix.r]].xyz;
+    conv[0] = texturep[uvw + pp[ix.r]].w;
+    fp[1] = texturep[uvw + pp[ix.g]].xyz;
+    n[1] = -texturen[uvw + pp[ix.g]].xyz;
+    n2[1] = texturen[uvw + pp[ix.g]].xyz;
+    conv[1] = texturep[uvw + pp[ix.g]].w;
+    fp[2] = texturep[uvw + pp[ix.b]].xyz;
+    n[2] = -texturen[uvw + pp[ix.b]].xyz;
+    n2[2] = texturen[uvw + pp[ix.b]].xyz;
+    conv[2] = texturep[uvw + pp[ix.b]].w;
+    fp[3] = texturep[uvw + pp[ix.a]].xyz;
+    n[3] = -texturen[uvw + pp[ix.a]].xyz;
+    n2[3] = texturen[uvw + pp[ix.a]].xyz;
+    conv[3] = texturep[uvw + pp[ix.a]].w;
+    
+    float d[4];
+
+    float e = boundingBox / (float) res;
+
+    float k = 0.005;
+    k = 0;
+    float sr = boundingBox / (float) res * 2.0f;
+    
+    for (int i = 0; i < 4; i++)
+    {
+        d[i] =  planeDist(p, fp[i], n[i]);
+        //d[i] = sdCircle(p, n[i], fp[i], sr);
+    }
+
+    int cc[4][4];
+    int c[4] = { 0, 0, 0, 0 };
+    int csum = 0;
+
+  
+    for (int j = 0; j < 4; j++)
+    {
+
+        cc[j][j] = 0;
+        for (int k = j + 1; k < 4; k++)
+        {
+
+            cc[j][k] = -1;
+            cc[k][j] = -1;
+            if (planeDist(fp[j], fp[k], n[k]) <= 0 && planeDist(fp[k], fp[j], n[j]) <= 0)
+            {
+                cc[j][k] = 0;
+                cc[k][j] = 0;
+            }
+
+            if (planeDist(fp[j], fp[k], n[k]) > 0 && planeDist(fp[k], fp[j], n[j]) > 0)
+            {
+                cc[j][k] = 1;
+                c[j]++;
+                cc[k][j] = 1;
+                c[k]++;
+                csum++;
+            }
+            
+            
+
+            if (cc[j][k] == -1)
+            {
+                /*if (conv[j] == -1 && conv[k] == -1)
+                {
+                    cc[j][k] = 1;
+                    c[j]++;
+                    cc[k][j] = 1;
+                    c[k]++;
+                    csum++;
+                }
+                else
+                {*/
+                    
+                    cc[j][k] = 0;
+                    cc[k][j] = 0;
+                //}
+            }
+
+        }
+
+    }
+
+
+    if (csum == 0)
+    {
+        return opSmoothIntersection(opSmoothIntersection(d[0], d[1], k), opSmoothIntersection(d[2], d[3], k), k);
+    }
+
+    if (csum == 6)
+    {
+        return opSmoothUnion(opSmoothUnion(d[0], d[1], k), opSmoothUnion(d[2], d[3], k), k);
+    }
+
+    if (csum == 1)
+    {
+
+        int i = 0;
+        float dist = -100000;
+        while (i < 4 && c[i] == 0)
+        {
+            i++;
+        }
+
+        for (int j = 0; j < 4; j++)
+        {
+            if (cc[i][j] == 1)
+            {
+                dist = opSmoothUnion(d[i], d[j], k);
+            }
+        }
+       
+
+        for (int j = 0; j < 4; j++)
+        {
+            if (c[j] == 0)
+            {
+                dist = opSmoothIntersection(dist, d[j], k);
+            }
+        }
+
+        return dist;
+
+    }
+
+    if (csum == 5)
+    {
+
+        int i = 0;
+        float dist = -100000;
+        while (i < 4 && c[i] == 2)
+        {
+            i++;
+        }
+
+        for (int j = 0; j < 4; j++)
+        {
+            if (cc[i][j] == 0)
+            {
+                dist = opSmoothIntersection(d[i], d[j], k);
+            }
+        }
+
+        for (int j = 0; j < 4; j++)
+        {
+            if (c[j] == 2)
+            {
+                dist = opSmoothUnion(dist, d[j], k);
+            }
+        }
+
+        return dist;
+
+    }
+
+    if (csum == 2) //4 metszet 2 unió
+    {
+
+        //két külön darab vagy egyben van?
+        bool tri = false;
+        int u1, u2, u3, i4;
+        u2 = -1;
+
+        for (int i = 0; i < 4; i++)
+        {
+            if (c[i] == 2)
+            {
+                u1 = i;
+                for (int j = 0; j < 4; j++)
+                {
+                    if (cc[i][j] == 1 && u2 == -1)
+                    {
+                        u2 = j;
+                    }
+                    if (cc[i][j] == 1)
+                    {
+                        u3 = j;
+                    }
+                    if (cc[i][j] == 0 && i != j)
+                    {
+                        i4 = j;
+                    }
+                }
+
+                tri = true;
+
+            }
+        }
+
+        if (tri == true)
+        {
+            float dist;
+            dist = opSmoothIntersection(d[u2], d[u3], k);
+            dist = opSmoothUnion(dist, d[u1], k);
+            return opSmoothIntersection(dist, d[i4], k);
+        }
+        else
+        {
+            float dist = -1000000;
+            for (int i = 0; i < 4; i++)
+            {
+                if (c[i] == 1)
+                {
+                    for (int j = 0; j < 4; j++)
+                    {
+                        if (cc[i][j] == 1)
+                        {
+                        
+                            dist = opSmoothIntersection(dist, min(d[i], d[j]), k);
+
+                        }
+                    }
+
+                }
+            }
+
+            return dist;
+
+        }
+
+    }
+
+    if (csum == 4) // 2 metszet 4 unió
+    {
+
+        //két külön darab vagy egyben van?
+        bool tri = false;
+        int u1, u2, u3, i4;
+        u2 = -1;
+
+        for (int i = 0; i < 4; i++)
+        {
+            if (c[i] == 1) //ehhez 2 metszet tartozik
+            {
+                u1 = i;
+                for (int j = 0; j < 4; j++)
+                {
+                    if (cc[i][j] == 0 && u2 == -1 && i != j)
+                    {
+                        u2 = j;
+                    }
+                    if (cc[i][j] == 0 && i != j)
+                    {
+                        u3 = j;
+                    }
+                    if (cc[i][j] == 1 && i != j)
+                    {
+                        i4 = j;
+                    }
+                }
+
+                tri = true;
+
+            }
+        }
+
+        if (tri == true)
+        {
+            float dist;
+            dist = opSmoothUnion(d[u2], d[u3], k);
+            dist = opSmoothIntersection(dist, d[u1], k);
+            return opSmoothUnion(dist, d[i4], k);
+        }
+        else
+        {
+            float dist = 1000000;
+            for (int i = 0; i < 4; i++)
+            {
+                if (c[i] == 2)
+                {
+                    for (int j = 0; j < 4; j++)
+                    {
+                        if (cc[i][j] == 0 && i != j)
+                        {
+                        
+                            dist = opSmoothUnion(dist, opSmoothIntersection(d[i], d[j], k), k);
+
+                        }
+                    }
+
+                }
+            }
+
+            //return max(max(d[0], d[1]), max(d[2], d[3]));
+            return dist;
+
+        }
+
+    }
+
+    if (csum == 3)
+    {
+        for (int i = 0; i < 4; i++)
+        {
+            if (c[i] == 3) //3 metszve, utolsó unióban minddel
+            {
+                float dist = -10000000;
+                for (int j = 0; j < 4; j++)
+                {
+                    if (i != j)
+                    {
+                        dist = max(dist, d[j]);
+                    }
+                }
+
+                return min(dist, d[i]);
+
+            }
+
+            if (c[i] == 0) //3 unió, utolsó metszetben minddel
+            {
+                float dist = 10000000;
+                for (int j = 0; j < 4; j++)
+                {
+                    if (i != j)
+                    {
+                        dist = min(dist, d[j]);
+                    }
+                }
+
+                return max(dist, d[i]);
+
+            }
+        }
+
+    }
+    
+    //return 10;
+    return trilinear(p);
+    
+}
+
 float filter(float3 pos)
 {
 #if INTERP == 0
     return nointerp(pos);
 #endif
 #if INTERP == 1
-    return trilinear(pos);
+    return abs(csg2(pos));
 #endif
     return nointerp(pos);
 }

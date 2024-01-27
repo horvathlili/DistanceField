@@ -1,6 +1,6 @@
 #include "../Compute/paramsurf.slang"
 
-float2 geomNewton(float3 pos)
+float2 geomNewton(float3 pos, float k)
 {
     float2 t;
 
@@ -14,10 +14,10 @@ float2 geomNewton(float3 pos)
         {
 
             float2 cc = convertParam(i / 20.f, j / 20.f);
-            if (length(mapP(cc.x,cc.y) - pos) < d)
+            if (length(mapP(k+cc.x,cc.y) - pos) < d)
             {
                 t = cc;
-                d = length(mapP(cc.x, cc.y) - pos);
+                d = length(mapP(k+cc.x, cc.y) - pos);
 
             }
 
@@ -31,10 +31,10 @@ float2 geomNewton(float3 pos)
     while (i < 100 && !end)
     {
 
-        float3 du = getdu(t.x, t.y);
-        float3 dv = getdv(t.x, t.y);
+        float3 du = getdu(k+t.x, t.y);
+        float3 dv = getdv(k+t.x, t.y);
 
-        float3 pn = mapP(t.x, t.y);
+        float3 pn = mapP(k+t.x, t.y);
 
         float2 b = float2(dot(pos - pn, du), dot(pos - pn, dv));
 
@@ -53,7 +53,7 @@ float2 geomNewton(float3 pos)
         c.y = X * (A.x * b.y - A.y * b.x);
 
         float3 qn = pn + c.x * du + c.y * dv;
-        float3 pn1 = mapP(t.x + c.x, t.y + c.y);
+        float3 pn1 = mapP(k+t.x + c.x, t.y + c.y);
 
         float3 f1 = qn - pn;
         float3 f2 = pn1 - qn;
@@ -74,6 +74,19 @@ float2 geomNewton(float3 pos)
             t.y = t.y + al * c.y;
         }
 
+        float2 limit = convertParam(1, 1);
+
+        if (t.x > limit.x)
+        {
+            t.x = limit.x;
+        }
+
+        if (t.y > limit.y)
+        {
+            t.y = limit.y;
+        }
+
+        
         i++;
 
     }
