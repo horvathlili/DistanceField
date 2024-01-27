@@ -42,7 +42,7 @@ void main(uint3 threadId : SV_DispatchThreadID)
         float2 uvt = geomNewton(pos,i);
         float3 p = mapP(uvt.x+i, uvt.y);
 
-        if (length(p - pos) < mind)
+        if (length(p - pos) <= mind)
         {
             mind = length(p - pos);
             uv = float2(uvt.x + i, uvt.y);

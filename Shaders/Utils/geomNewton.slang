@@ -40,13 +40,13 @@ float2 geomNewton(float3 pos, float k)
 
         float4 A = float4(dot(du, du), dot(du, dv), dot(dv, du), dot(dv, dv));
         
+        
+        
+        float X = 1.f / (float) (A.x * A.w - A.y * A.z);
         if (A.x * A.w - A.y * A.z == 0)
         {
             return 0;
         }
-        
-        float X = 1.f / (float) (A.x * A.w - A.y * A.z);
-
         float2 c = float2(0);
 
         c.x = X * (A.w * b.x - A.y * b.y);
@@ -63,10 +63,12 @@ float2 geomNewton(float3 pos, float k)
         float a2 = dot(-3 * f1, f2);
         float a3 = -2 * dot(f2, f2);
 
+       
+        float al = 1 - (a0 + a1 + a2 + a3) / (a1 + 2 * a2 + 3 * a3);
+
         if ((a1 + 2 * a2 + 3 * a3) == 0)
             return 0;
         
-        float al = 1 - (a0 + a1 + a2 + a3) / (a1 + 2 * a2 + 3 * a3);
 
         if (al > 0 && al < 20)
         {

@@ -57,7 +57,7 @@ float geomNewton(float3 pos)
         
         if (A.x * A.w - A.y * A.z == 0)
         {
-            return 0;
+            return -1;
         }
         
         float X = 1.f / (float) (A.x * A.w - A.y * A.z);
@@ -79,7 +79,7 @@ float geomNewton(float3 pos)
         float a3 = -2 * dot(f2, f2);
 
         if ((a1 + 2 * a2 + 3 * a3) == 0)
-            return 0;
+            return -1;
         
         float al = 1 - (a0 + a1 + a2 + a3) / (a1 + 2 * a2 + 3 * a3);
 

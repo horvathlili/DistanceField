@@ -196,6 +196,11 @@ float3 mapP(float u, float v)
     #if SHAPE == 3
     return coneP(u, v);
     #endif
+    #if SHAPE == 4
+    int k = (int)u;
+    u = u-k;
+        return bezier(u, v,k);
+    #endif
     return float3(0, 0, 0);
 }
 
@@ -214,6 +219,11 @@ float3 getdu(float u, float v)
     #endif
      #if SHAPE == 3
     return conedu(u, v);
+    #endif
+    #if SHAPE == 4
+     int k = (int)u;
+    u = u-k;
+        return bezierdu(u, v,k);
     #endif
     return float3(0, 0, 0);
 }
@@ -234,6 +244,11 @@ float3 getdv(float u, float v)
      #if SHAPE == 3
     return conedv(u, v);
     #endif
+    #if SHAPE == 4
+    int k = (int)u;
+    u = u-k;
+        return bezierdv(u, v,k);
+    #endif
     return float3(0, 0, 0);
 }
 
@@ -252,6 +267,11 @@ float3 getduu(float u, float v)
     #endif
      #if SHAPE == 3
     return coneduu(u, v);
+    #endif
+    #if SHAPE == 4
+    int k = (int)u;
+    u = u-k;
+        return bezierduu(u, v,k);
     #endif
     return float3(0, 0, 0);
 }
@@ -272,6 +292,11 @@ float3 getduv(float u, float v)
      #if SHAPE == 3
     return coneduv(u, v);
     #endif
+    #if SHAPE == 4
+    int k = (int)u;
+    u = u-k;
+        return bezierduv(u, v,k);
+    #endif
     return float3(0, 0, 0);
 }
 
@@ -290,6 +315,11 @@ float3 getdvv(float u, float v)
     #endif
      #if SHAPE == 3
     return conedvv(u, v);
+    #endif
+    #if SHAPE == 4
+    int k = (int)u;
+    u = u-k;
+        return bezierdvv(u, v,k);
     #endif
     return float3(0, 0, 0);
 }

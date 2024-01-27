@@ -43,14 +43,21 @@ void ProgramParam3D::SetUpGui() {
     cone.label = "cone";
     cone.buttonID = 3;
     cone.sameLine = true;
+    Gui::RadioButton cube;
+    cube.label = "cube";
+    cube.buttonID = 4;
+    cube.sameLine = true;
 
     bg_shape.push_back(sphere);
     bg_shape.push_back(bezier);
     bg_shape.push_back(cyl);
     bg_shape.push_back(cone);
+    bg_shape.push_back(cube);
 }
 
 void ProgramParam3D::randomBezier() {
+
+    nm.clear();
 
     n = 1;
     nm.push_back(float2(5, 5));
@@ -59,6 +66,7 @@ void ProgramParam3D::randomBezier() {
         bezierdb += (int)(nm[i].x + 1) * (int)(nm[i].y + 1);
     }
 
+    bezier.clear();
     bezier.resize(bezierdb);
 
     float db = 0;
@@ -78,18 +86,20 @@ void ProgramParam3D::randomBezier() {
 
 void ProgramParam3D::cubeBezier() {
 
+    nm.clear();
     n = 6;
     nm.push_back(float2(1, 1));
     nm.push_back(float2(1, 1));
     nm.push_back(float2(1, 1));
     nm.push_back(float2(1, 1));
     nm.push_back(float2(1, 1));
-    nm.push_back(float2(1, 1));
+    nm.push_back(float2(1, 1)); 
 
     for (int i = 0; i < n; i++) {
         bezierdb += (int)(nm[i].x + 1) * (int)(nm[i].y + 1);
     }
 
+    bezier.clear();
     bezier.resize(bezierdb);
 
     float db = 0;
@@ -98,7 +108,7 @@ void ProgramParam3D::cubeBezier() {
     for (int i = 0; i <= nm[0].x; i++) {
         for (int j = 0; j <= nm[0].y; j++) {
             //bezier[i * m + j] = float3(i / (float)n, 0.5, j / (float)m);
-            bezier[(int)db + i * (int)(nm[0].y + 1) + j] = float3(-0.5 + i, -0.5, -0.5 + j);
+            bezier[(int)db + i * (int)(nm[0].y + 1) + j] = float3(0.5 - i, -0.5, -0.5 + j);
         }
     }
 
@@ -125,15 +135,15 @@ void ProgramParam3D::cubeBezier() {
     for (int i = 0; i <= nm[2].x; i++) {
         for (int j = 0; j <= nm[2].y; j++) {
             //bezier[i * m + j] = float3(i / (float)n, 0.5, j / (float)m);
-            bezier[(int)db + i * (int)(nm[2].y + 1) + j] = float3(+0.5, -0.5 + i, -0.5 + j);
+            bezier[(int)db + i * (int)(nm[2].y + 1) + j] = float3(+0.5, 0.5 - i, -0.5 + j);
         }
     }
-    db += (nm[1].x + 1) * (nm[1].y + 1);
+   db += (nm[1].x + 1) * (nm[1].y + 1);
 
     for (int i = 0; i <= nm[2].x; i++) {
         for (int j = 0; j <= nm[2].y; j++) {
             //bezier[i * m + j] = float3(i / (float)n, 0.5, j / (float)m);
-            bezier[(int)db + i * (int)(nm[2].y + 1) + j] = float3(-0.5 + i, -0.5 + j, +0.5);
+            bezier[(int)db + i * (int)(nm[2].y + 1) + j] = float3(0.5 - i, -0.5 + j, +0.5);
         }
     }
     db += (nm[1].x + 1) * (nm[1].y + 1);
@@ -157,7 +167,7 @@ ProgramParam3D::ProgramParam3D() {
     testProgram->createProgram("Samples/DistanceField/Shaders/Compute/test.cs.slang");
 
     SetUpGui();
-    cubeBezier();
+    randomBezier();
 
     dim = 3;
 }
@@ -251,6 +261,11 @@ std::vector<Texture::SharedPtr> ProgramParam3D::generateTexture(RenderContext* p
 
     nx = 1;
     if (shape == 1) {
+        //randomBezier();
+        nx = n;
+    }
+    if (shape == 4) {
+        cubeBezier();
         nx = n;
     }
 

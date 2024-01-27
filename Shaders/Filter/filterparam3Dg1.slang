@@ -546,7 +546,7 @@ float3 getNormal_filter(float3 pos)
     float3 p23 = pos - float3(0, 0, e);
       
     n.z = getDifference(p13, p23);
-
+   
    
     return normalize(n);
 }

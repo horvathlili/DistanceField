@@ -41,8 +41,13 @@ void main(uint2 threadId : SV_DispatchThreadID)
 
         float3 pos = getQueryPoint(float3(threadId.xy, i));
         
-        error = abs(map(pos) - abs(filter(pos)));
-        //error = map(pos);
+        error = abs(abs(map(pos)) - abs(filter(pos)));
+
+        if (map(pos) < 0)
+        {
+            error = 0;
+        }
+        //error = (map(pos));
         data1[threadId.x * testres * testres + threadId.y * testres + i] = error;
   
     }
