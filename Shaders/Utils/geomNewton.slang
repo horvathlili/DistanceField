@@ -24,9 +24,8 @@ float2 geomNewton(float3 pos, float k)
         }
     }
 
-    //now only works for 1 surface (for multiple all patches have to be handled separately)
 
-        int i = 0;
+    int i = 0;
     bool end = false;
     while (i < 100 && !end)
     {
@@ -88,8 +87,23 @@ float2 geomNewton(float3 pos, float k)
             t.y = limit.y;
         }
 
+       limit = convertParam(0, 0);
+
+        if (t.x < limit.x)
+        {
+            t.x = limit.x;
+        }
+
+        if (t.y < limit.y)
+        {
+            t.y = limit.y;
+        }
+
         
         i++;
+
+        if (length(pn1-pn) < 0.00001)
+            end = true;
 
     }
     return t;

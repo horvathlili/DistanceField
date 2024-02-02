@@ -1,13 +1,5 @@
 #pragma once
 
-#ifndef MINM
-#define MINM 0
-#endif
-
-#ifndef INTERP
-#define INTERP 0
-#endif
-
 float planeDist(float3 pos, float3 p, float3 n)
 {
     float h = -dot(n, p);

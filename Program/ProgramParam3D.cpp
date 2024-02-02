@@ -9,11 +9,16 @@ void ProgramParam3D::SetUpGui() {
     min1.sameLine = false;
     Gui::RadioButton interp;
     interp.label = "interpolation";
-    interp.buttonID = 2;
+    interp.buttonID = 1;
     interp.sameLine = true;
+    Gui::RadioButton csg;
+    csg.label = "csg";
+    csg.buttonID = 2;
+    csg.sameLine = true;
 
     bg_min.push_back(min1);
     bg_min.push_back(interp);
+    bg_min.push_back(csg);
 
     Gui::RadioButton g1;
     g1.label = "g1";
@@ -76,7 +81,7 @@ void ProgramParam3D::randomBezier() {
         for (int i = 0; i <= nm[0].x; i++) {
             for (int j = 0; j <= nm[0].y; j++) {
                 //bezier[i * m + j] = float3(i / (float)n, 0.5, j / (float)m);
-                bezier[(int)db + i * (int)(nm[0].y + 1) + j] = float3(i / (float)5 * boundingBox - boundingBox / 2.f, rand() / (float)RAND_MAX, j / (float)5 * boundingBox - boundingBox / 2.f);
+                bezier[(int)db + i * (int)(nm[0].y + 1) + j] = float3(i / (float)5 * 2 - 1, rand() / (float)RAND_MAX, j / (float)5 * 2 - 1);
             }
         }
 
@@ -87,13 +92,13 @@ void ProgramParam3D::randomBezier() {
 void ProgramParam3D::cubeBezier() {
 
     nm.clear();
-    n = 6;
-    nm.push_back(float2(1, 1));
-    nm.push_back(float2(1, 1));
-    nm.push_back(float2(1, 1));
-    nm.push_back(float2(1, 1));
-    nm.push_back(float2(1, 1));
-    nm.push_back(float2(1, 1)); 
+    n =6;
+    nm.push_back(float2(2, 2));
+    nm.push_back(float2(2, 2));
+    nm.push_back(float2(2, 2));
+    nm.push_back(float2(2, 2));
+    nm.push_back(float2(2, 2));
+    nm.push_back(float2(2, 2)); 
 
     for (int i = 0; i < n; i++) {
         bezierdb += (int)(nm[i].x + 1) * (int)(nm[i].y + 1);
@@ -108,7 +113,7 @@ void ProgramParam3D::cubeBezier() {
     for (int i = 0; i <= nm[0].x; i++) {
         for (int j = 0; j <= nm[0].y; j++) {
             //bezier[i * m + j] = float3(i / (float)n, 0.5, j / (float)m);
-            bezier[(int)db + i * (int)(nm[0].y + 1) + j] = float3(0.5 - i, -0.5, -0.5 + j);
+            bezier[(int)db + i * (int)(nm[0].y + 1) + j] = float3(0.5 - i/nm[0].x, -0.5, -0.5 + j / nm[0].y);
         }
     }
 
@@ -117,7 +122,7 @@ void ProgramParam3D::cubeBezier() {
     for (int i = 0; i <= nm[1].x; i++) {
         for (int j = 0; j <= nm[1].y; j++) {
             //bezier[i * m + j] = float3(i / (float)n, 0.5, j / (float)m);
-            bezier[(int)db + i * (int)(nm[1].y + 1) + j] = float3(-0.5 + i, -0.5 + j, -0.5);
+            bezier[(int)db + i * (int)(nm[1].y + 1) + j] = float3(-0.5 + i / nm[1].x, -0.5 + j / nm[1].y, -0.5);
         }
     }
 
@@ -126,32 +131,32 @@ void ProgramParam3D::cubeBezier() {
     for (int i = 0; i <= nm[2].x; i++) {
         for (int j = 0; j <= nm[2].y; j++) {
             //bezier[i * m + j] = float3(i / (float)n, 0.5, j / (float)m);
-            bezier[(int)db + i * (int)(nm[2].y + 1) + j] = float3(-0.5, -0.5 + i, -0.5 + j);
+            bezier[(int)db + i * (int)(nm[2].y + 1) + j] = float3(-0.5, -0.5 + i / nm[2].x, -0.5 + j / nm[2].y);
         }
     }
 
-    db += (nm[1].x + 1) * (nm[1].y + 1);
+    db += (nm[2].x + 1) * (nm[2].y + 1);
 
-    for (int i = 0; i <= nm[2].x; i++) {
-        for (int j = 0; j <= nm[2].y; j++) {
+    for (int i = 0; i <= nm[3].x; i++) {
+        for (int j = 0; j <= nm[3].y; j++) {
             //bezier[i * m + j] = float3(i / (float)n, 0.5, j / (float)m);
-            bezier[(int)db + i * (int)(nm[2].y + 1) + j] = float3(+0.5, 0.5 - i, -0.5 + j);
+            bezier[(int)db + i * (int)(nm[3].y + 1) + j] = float3(+0.5, 0.5 - i / nm[3].x, -0.5 + j / nm[3].y);
         }
     }
-   db += (nm[1].x + 1) * (nm[1].y + 1);
+   db += (nm[3].x + 1) * (nm[3].y + 1);
 
-    for (int i = 0; i <= nm[2].x; i++) {
-        for (int j = 0; j <= nm[2].y; j++) {
+    for (int i = 0; i <= nm[4].x; i++) {
+        for (int j = 0; j <= nm[4].y; j++) {
             //bezier[i * m + j] = float3(i / (float)n, 0.5, j / (float)m);
-            bezier[(int)db + i * (int)(nm[2].y + 1) + j] = float3(0.5 - i, -0.5 + j, +0.5);
+            bezier[(int)db + i * (int)(nm[4].y + 1) + j] = float3(0.5 - i / nm[4].x, -0.5 + j / nm[4].y, +0.5);
         }
     }
-    db += (nm[1].x + 1) * (nm[1].y + 1);
+    db += (nm[4].x + 1) * (nm[4].y + 1);
 
-    for (int i = 0; i <= nm[2].x; i++) {
-        for (int j = 0; j <= nm[2].y; j++) {
+    for (int i = 0; i <= nm[5].x; i++) {
+        for (int j = 0; j <= nm[5].y; j++) {
             //bezier[i * m + j] = float3(i / (float)n, 0.5, j / (float)m);
-            bezier[(int)db + i * (int)(nm[2].y + 1) + j] = float3(-0.5 + i, +0.5, -0.5 + j);
+            bezier[(int)db + i * (int)(nm[5].y + 1) + j] = float3(-0.5 + i / nm[5].x, +0.5, -0.5 + j / nm[5].y);
         }
     }
 
@@ -188,8 +193,7 @@ void ProgramParam3D::testing(RenderContext* pRenderContext) {
     comp["csCb"]["shape"] = shape;
     comp["csCb"]["rs"] = rs;
     comp.getProgram()->addDefine("FIELD", std::to_string(field));
-    int interp = minm < 2 ? 0 : 1;
-    comp.getProgram()->addDefine("MINM", std::to_string(minm));
+    //comp.getProgram()->addDefine("MINM", std::to_string(minm));
     comp.getProgram()->addDefine("INTERP", std::to_string(interp));
     comp.getProgram()->addDefine("SHAPE", std::to_string(shape));
     comp.getProgram()->addDefine("DIM", std::to_string(dim));
@@ -209,14 +213,25 @@ void ProgramParam3D::testing(RenderContext* pRenderContext) {
 
 
     float avg = 0;
+    float secondn = 0;
+    float maxn = 0;
+    int avgdb = 0;
     for (int i = 0; i < testres * testres * testres; i++) {
-        avg += data1[i];
 
-        std::cout << data1[i] << std::endl;
+        if (!isnan(data1[i]) && data1[i] < boundingBox / 3.f) {
+            avg += data1[i];
+            avgdb++;
+            secondn += data1[i] * data1[i];
+            if (data1[i] > maxn) {
+                maxn = data1[i];
+            }
+        }
+       // std::cout << data1[i] << std::endl;
     }
 
-    std::cout << avg / (float)(testres * testres * testres) << std::endl;
-
+    std::cout <<"1: "<< avg / (float)(avgdb) << std::endl;
+    std::cout << "2: " << secondn / (float)(avgdb) << std::endl;
+    std::cout << "inf: " << maxn<< std::endl;
 }
 
 void ProgramParam3D::renderGui(Gui::Window* w) {
@@ -230,7 +245,7 @@ void ProgramParam3D::renderGui(Gui::Window* w) {
     w->slider("resolution", sliderRes, 1, 100);
     w->slider("intersecting sphere", rs, 0.f, 1.f);
     (w->slider("boundingBox", sliderboundingBox, 2.f, 20.f));
-    w->radioButtons(bg_min, minm);
+    w->radioButtons(bg_min, interp);
     w->separator();
     if (w->button("Run test")) {
         test = true;
@@ -269,8 +284,6 @@ std::vector<Texture::SharedPtr> ProgramParam3D::generateTexture(RenderContext* p
         nx = n;
     }
 
-    std::cout << nx << std::endl;
-
     pTexp = Texture::create3D(resolution, resolution, resolution, format, 1, nullptr, ResourceBindFlags::ShaderResource | ResourceBindFlags::UnorderedAccess);
     pTexn = Texture::create3D(resolution, resolution, resolution, format, 1, nullptr, ResourceBindFlags::ShaderResource | ResourceBindFlags::UnorderedAccess);
     pTex3 = Texture::create3D(resolution, resolution, resolution, format, 1, nullptr, ResourceBindFlags::ShaderResource | ResourceBindFlags::UnorderedAccess);
@@ -301,9 +314,9 @@ std::vector<Texture::SharedPtr> ProgramParam3D::generateTexture(RenderContext* p
 
 
 
-    for (int i = 0; i < resolution * resolution; i++) {
+   /* for (int i = 0; i < resolution * resolution; i++) {
         std::cout << data1[i].x << " " << data1[i].y <<" "<<data1[i].z<< std::endl;
-    }
+    }*/
 
     std::vector<Texture::SharedPtr> textures;
     textures.push_back(pTexp);

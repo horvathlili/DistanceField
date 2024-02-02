@@ -1,13 +1,5 @@
 #pragma once
 
-#ifndef MINM
-#define MINM 0
-#endif
-
-#ifndef INTERP
-#define INTERP 0
-#endif
-
 float planeDist(float3 pos, float3 p, float3 n)
 {
     float h = -dot(n, p);
@@ -102,14 +94,14 @@ float nointerp(float3 pos)
 
             float d = max(abs(planeDist(pos, p, n)), sphereDist(pos, p, rs));
 
-#if MINM == 1
+#if INTERP == 1
             if (  ( length(pos - minp) > length(pos - p)))
             {
                 mind = d;
                 minp = p;
             }
 #endif
-#if MINM == 0
+#if INTERP == 0
             if (d < mind)
             {
                 mind = d;
@@ -130,7 +122,10 @@ float filter(float3 pos)
     #if INTERP == 0
     return nointerp(pos);
     #endif
-    #if INTERP == 1
+#if INTERP == 1
+    return nointerp(pos);
+    #endif
+    #if INTERP == 2
     return interp(pos);
 #endif
     return 1;

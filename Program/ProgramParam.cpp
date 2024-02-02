@@ -193,8 +193,7 @@ void ProgramParam::testing(RenderContext* pRenderContext) {
     comp["csCb"]["shape"] = shape;
     comp["csCb"]["rs"] = rs;
     comp.getProgram()->addDefine("FIELD", std::to_string(field));
-    int interp = minm < 2 ? 0 : 1;
-    comp.getProgram()->addDefine("MINM", std::to_string(minm));
+    comp.getProgram()->addDefine("MINM", std::to_string(interp));
     comp.getProgram()->addDefine("INTERP", std::to_string(interp));
     comp.getProgram()->addDefine("DIM", std::to_string(dim));
 
@@ -236,7 +235,7 @@ void ProgramParam::renderGui(Gui::Window* w) {
     w->slider("resolution", sliderRes, 1, 100);
     w->slider("intersecting sphere", rs, 0.f, 1.f);
     (w->slider("boundingBox", sliderboundingBox, 2.f, 20.f));
-    w->radioButtons(bg_min, minm);
+    w->radioButtons(bg_min, interp);
     w->separator();
     if (w->button("Run test")) {
         test = true;

@@ -7,6 +7,11 @@
 #endif
 
 
+#ifndef INTERP
+#define INTERP 0
+#endif
+
+
 #if DIM == 3
 #if FIELD == 1
 #include "Filter/filterparam3Dg1.slang"

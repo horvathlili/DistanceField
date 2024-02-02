@@ -1,13 +1,5 @@
 #pragma once
 
-#ifndef MINM
-#define MINM 0
-#endif
-
-#ifndef INTERP
-#define INTERP 0
-#endif
-
 float planeDist(float3 pos, float3 p, float3 n)
 {
     float h = -dot(n, p);
@@ -197,12 +189,16 @@ float csg2(float3 p)
     {
         d[i] =  planeDist(p, fp[i], n[i]);
         //d[i] = sdCircle(p, n[i], fp[i], sr);
+       // d[i] = max(abs(planeDist(p, fp[i], n[i])), sphereDist(p, fp[i], rs));
+
     }
 
     int cc[4][4];
     int c[4] = { 0, 0, 0, 0 };
     int csum = 0;
 
+
+    //return max(max(d[0], d[1]), max(d[2], d[3]));
   
     for (int j = 0; j < 4; j++)
     {
@@ -507,6 +503,9 @@ float filter(float3 pos)
     return nointerp(pos);
 #endif
 #if INTERP == 1
+    return trilinear(pos);
+#endif
+#if INTERP == 2
     return abs(csg2(pos));
 #endif
     return nointerp(pos);
@@ -516,7 +515,6 @@ float filter(float3 pos)
 
 float getDifference(float3 p1, float3 p2)
 {
-   // return 1;
     return filter(p1) - filter(p2);
 }
 

@@ -101,14 +101,18 @@ float geomNewton(float3 pos)
 float map(float3 pos)
 {
 #if SHAPE == 0
-    //return abs(length(pos) - 1);
-    return geomNewton(pos);
+    return abs(length(pos) - 1);
+    //return geomNewton(pos);
 #endif
 #if SHAPE == 1
     return geomNewton(pos);
 
 #endif
     #if SHAPE == 2
+    float x = dot(pos , float3(0,0,1));
+    float y = dot(pos, float3(1,0,0));
+
+    return length(float2(x, y)) - 1;
     return geomNewton(pos);
 
 #endif
