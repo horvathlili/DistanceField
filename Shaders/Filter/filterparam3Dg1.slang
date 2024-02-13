@@ -187,9 +187,10 @@ float csg2(float3 p)
     
     for (int i = 0; i < 4; i++)
     {
-        d[i] =  planeDist(p, fp[i], n[i]);
+        d[i] = (planeDist(p, fp[i], n[i]));
         //d[i] = sdCircle(p, n[i], fp[i], sr);
-       // d[i] = max(abs(planeDist(p, fp[i], n[i])), sphereDist(p, fp[i], rs));
+        
+        //d[i] = (max(abs(planeDist(p, fp[i], n[i])), sphereDist(p, fp[i], rs)));
 
     }
 
@@ -198,7 +199,7 @@ float csg2(float3 p)
     int csum = 0;
 
 
-    //return max(max(d[0], d[1]), max(d[2], d[3]));
+   // return max(max(d[0], d[1]), max(d[2], d[3]));
   
     for (int j = 0; j < 4; j++)
     {

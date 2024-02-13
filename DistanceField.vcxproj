@@ -13,6 +13,7 @@
   <ItemGroup>
     <ClCompile Include="DistanceField.cpp" />
     <ClCompile Include="Program\Program3D.cpp" />
+    <ClCompile Include="Program\ProgramImplicit3D.cpp" />
     <ClCompile Include="Program\ProgramParam.cpp" />
     <ClCompile Include="Program\ProgramParam3D.cpp" />
     <ClCompile Include="Utils\ComputeProgramWrapper.cpp" />
@@ -20,6 +21,7 @@
   <ItemGroup>
     <ClInclude Include="DistanceField.h" />
     <ClInclude Include="Program\Program3D.h" />
+    <ClInclude Include="Program\ProgramImplicit3D.h" />
     <ClInclude Include="Program\ProgramParam.h" />
     <ClInclude Include="Program\ProgramParam3D.h" />
     <ClInclude Include="Utils\ComputeProgramWrapper.h" />
@@ -34,6 +36,8 @@
     <ShaderSource Include="Shaders\3d.ps.slang" />
     <ShaderSource Include="Shaders\3d.vs.slang" />
     <ShaderSource Include="Shaders\Compute\bezier.slang" />
+    <ShaderSource Include="Shaders\Compute\implicitg1.cs.slang" />
+    <ShaderSource Include="Shaders\Compute\implicitsurf.slang" />
     <ShaderSource Include="Shaders\Compute\param.cs.slang" />
     <ShaderSource Include="Shaders\Compute\param3Dg1.cs.slang" />
     <ShaderSource Include="Shaders\Compute\param3Dg2.cs.slang" />

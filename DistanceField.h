@@ -28,6 +28,7 @@
 #pragma once
 #include "Falcor.h"
 #include "Program/ProgramParam3D.h"
+#include "Program/ProgramImplicit3D.h"
 #include "Program/ProgramParam.h"
 
 
@@ -67,6 +68,7 @@ private:
     DebugConsole console;
 
     ProgramParam3D programP;
+    ProgramImplicit3D programI;
     ProgramParam programP2d;
 
     uint programid = 0;

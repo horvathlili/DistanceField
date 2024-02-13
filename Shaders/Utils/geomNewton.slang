@@ -24,10 +24,11 @@ float2 geomNewton(float3 pos, float k)
         }
     }
 
+    //return t;
 
     int i = 0;
     bool end = false;
-    while (i < 100 && !end)
+    while (i < 10 && !end)
     {
 
         float3 du = getdu(k+t.x, t.y);
@@ -44,7 +45,7 @@ float2 geomNewton(float3 pos, float k)
         float X = 1.f / (float) (A.x * A.w - A.y * A.z);
         if (A.x * A.w - A.y * A.z == 0)
         {
-            return 0;
+            return t;
         }
         float2 c = float2(0);
 
@@ -54,7 +55,7 @@ float2 geomNewton(float3 pos, float k)
         float3 qn = pn + c.x * du + c.y * dv;
         float3 pn1 = mapP(k+t.x + c.x, t.y + c.y);
 
-        float3 f1 = qn - pn;
+      /*  float3 f1 = qn - pn;
         float3 f2 = pn1 - qn;
 
         float a0 = dot(pos - pn, f1);
@@ -62,11 +63,13 @@ float2 geomNewton(float3 pos, float k)
         float a2 = dot(-3 * f1, f2);
         float a3 = -2 * dot(f2, f2);
 
-       
-        float al = 1 - (a0 + a1 + a2 + a3) / (a1 + 2 * a2 + 3 * a3);
+       */
+        //float al = 1 - (a0 + a1 + a2 + a3) / (a1 + 2 * a2 + 3 * a3);
 
-        if ((a1 + 2 * a2 + 3 * a3) == 0)
-            return 0;
+        float al = 0.6;
+        
+       // if ((a1 + 2 * a2 + 3 * a3) == 0)
+          //  return 0;
         
 
         if (al > 0 && al < 20)
@@ -75,7 +78,7 @@ float2 geomNewton(float3 pos, float k)
             t.y = t.y + al * c.y;
         }
 
-        float2 limit = convertParam(1, 1);
+        float2 limit = 0.99*convertParam(1, 1);
 
         if (t.x > limit.x)
         {
@@ -87,7 +90,7 @@ float2 geomNewton(float3 pos, float k)
             t.y = limit.y;
         }
 
-       limit = convertParam(0, 0);
+       limit = convertParam(0, 0)+0.01;
 
         if (t.x < limit.x)
         {
@@ -101,7 +104,7 @@ float2 geomNewton(float3 pos, float k)
 
         
         i++;
-
+        
         if (length(pn1-pn) < 0.00001)
             end = true;
 

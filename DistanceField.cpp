@@ -37,6 +37,7 @@ void DistanceField::initPlane() {
     FALCOR_ASSERT(pVao);
 
     programP.setVao(pVbo, pVao);
+    programI.setVao(pVbo, pVao);
     programP2d.setVao(pVbo, pVao);
    
 }
@@ -106,6 +107,7 @@ void DistanceField::initBox() {
     FALCOR_ASSERT(cubeVao);
 
     programP.setCubeVao(cubeVbo, cubeVao);
+    programI.setCubeVao(cubeVbo, cubeVao);
     programP2d.setCubeVao(cubeVbo, cubeVao);
   
 }
@@ -124,6 +126,7 @@ void DistanceField::initCamera() {
     cameraControl->setCameraSpeed(1.0f);
 
    programP.setCamera(camera, cameraControl);
+   programI.setCamera(camera, cameraControl);
    programP2d.setCamera(camera, cameraControl);
      
 }
@@ -139,6 +142,9 @@ void DistanceField::onGuiRender(Gui* pGui)
     }
     if (programid == 1) {
         programP2d.renderGui(&w);
+    }
+    if (programid == 2) {
+        programI.renderGui(&w);
     }
 }
 
@@ -156,9 +162,15 @@ void DistanceField::onLoad(RenderContext* pRenderContext)
     param3d.label = "parametric surface 3d data";
     param3d.buttonID = 0;
     param3d.sameLine = true;
+    Gui::RadioButton implicit;
+    implicit.label = "implicit surface";
+    implicit.buttonID = 2;
+     implicit.sameLine = true;
+
 
     bg_field.push_back(param2d);
     bg_field.push_back(param3d);
+    bg_field.push_back(implicit);
    
 }
 
@@ -174,6 +186,9 @@ void DistanceField::onFrameRender(RenderContext* pRenderContext, const Fbo::Shar
     }
     if (programid == 1) {
         programP2d.Render(pRenderContext, pTargetFbo);
+    }
+    if (programid == 2) {
+        programI.Render(pRenderContext, pTargetFbo);
     }
 }
 

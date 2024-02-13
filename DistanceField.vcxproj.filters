@@ -14,6 +14,9 @@
     <ClCompile Include="Program\ProgramParam3D.cpp">
       <Filter>Program</Filter>
     </ClCompile>
+    <ClCompile Include="Program\ProgramImplicit3D.cpp">
+      <Filter>Program</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DistanceField.h" />
@@ -27,6 +30,9 @@
       <Filter>Program</Filter>
     </ClInclude>
     <ClInclude Include="Program\ProgramParam3D.h">
+      <Filter>Program</Filter>
+    </ClInclude>
+    <ClInclude Include="Program\ProgramImplicit3D.h">
       <Filter>Program</Filter>
     </ClInclude>
   </ItemGroup>
@@ -110,6 +116,12 @@
     </ShaderSource>
     <ShaderSource Include="Shaders\includes.slang">
       <Filter>Shaders</Filter>
+    </ShaderSource>
+    <ShaderSource Include="Shaders\Compute\implicitg1.cs.slang">
+      <Filter>Shaders\Compute</Filter>
+    </ShaderSource>
+    <ShaderSource Include="Shaders\Compute\implicitsurf.slang">
+      <Filter>Shaders\Compute</Filter>
     </ShaderSource>
   </ItemGroup>
 </Project>

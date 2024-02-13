@@ -1,4 +1,4 @@
-#include "paramsurf.slang"
+//#include "implicitsurf.slang"
 #include "../Utils/geomNewton.slang"
 
 RWTexture3D<float3> texp;

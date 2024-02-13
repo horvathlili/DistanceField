@@ -70,7 +70,7 @@ float getTorusDist(float3 pos, float3 fp, float3 t, float3 n, float kr, float kR
 
     //calculate frequently used values
     float dTorus = sdTorus(pos, c, t, r, R);
-
+  
     if (R < 0.01)
     {
     
@@ -81,6 +81,7 @@ float getTorusDist(float3 pos, float3 fp, float3 t, float3 n, float kr, float kR
     if (abs(kr) < 0.1 && abs(kR) < 0.1)
     {
         dTorus = planeDist(pos, fp, normalize(n));
+       // return (dTorus);
     }
 
     if (abs(kR) < 0.1 && abs(kr) >= 0.1)
@@ -89,8 +90,13 @@ float getTorusDist(float3 pos, float3 fp, float3 t, float3 n, float kr, float kR
         //recalculate the center
         c = fp + n * 1 / kr;
         dTorus = cylinderDist(pos, r, c, n, t);
-
         
+    }
+
+  
+    if (kr < 0 && abs(kr) > 0.1)
+    {
+       dTorus *= -1;
     }
 
     return dTorus;
@@ -109,7 +115,7 @@ float nointerp(float3 pos)
     float kR = texturen[uvw].w;
             
     float d = max(abs(getTorusDist(pos, p, t, n, kr, kR)), sphereDist(pos, p, rs));
-
+   // d = abs(getTorusDist(pos, p, t, n, kr, kR));
     return d;
 
 }
@@ -124,6 +130,8 @@ float getTexture(float3 uvw, float3 pos)
     float kR = texturen[uvw].w;
             
     float d = getTorusDist(pos, p, t, n, kr, kR);
+
+    d = (max(abs(d), sphereDist(pos, p, rs)));
 
     return (d);
 
