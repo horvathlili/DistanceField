@@ -51,6 +51,7 @@
     <ShaderSource Include="Shaders\includes.slang" />
     <ShaderSource Include="Shaders\Utils\beziers.slang" />
     <ShaderSource Include="Shaders\Utils\geomNewton.slang" />
+    <ShaderSource Include="Shaders\Utils\newton.slang" />
     <ShaderSource Include="Shaders\Utils\param.slang" />
     <ShaderSource Include="Shaders\Utils\ray.slang" />
     <ShaderSource Include="Shaders\Utils\spheretrace.slang" />

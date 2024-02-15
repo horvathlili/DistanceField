@@ -123,5 +123,8 @@
     <ShaderSource Include="Shaders\Compute\implicitsurf.slang">
       <Filter>Shaders\Compute</Filter>
     </ShaderSource>
+    <ShaderSource Include="Shaders\Utils\newton.slang">
+      <Filter>Shaders\Utils</Filter>
+    </ShaderSource>
   </ItemGroup>
 </Project>

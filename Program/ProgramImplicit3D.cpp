@@ -36,28 +36,14 @@ void ProgramImplicit3D::SetUpGui() {
     sphere.label = "sphere";
     sphere.buttonID = 0;
     sphere.sameLine = false;
-    Gui::RadioButton bezier;
-    bezier.label = "bezier";
-    bezier.buttonID = 1;
-    bezier.sameLine = true;
-    Gui::RadioButton cyl;
-    cyl.label = "cylinder";
-    cyl.buttonID = 2;
-    cyl.sameLine = true;
-    Gui::RadioButton cone;
-    cone.label = "cone";
-    cone.buttonID = 3;
-    cone.sameLine = true;
-    Gui::RadioButton cube;
-    cube.label = "cube";
-    cube.buttonID = 4;
-    cube.sameLine = true;
+    Gui::RadioButton torus;
+    torus.label = "torus";
+    torus.buttonID = 1;
+    torus.sameLine = true;
+   
 
     bg_shape.push_back(sphere);
-   // bg_shape.push_back(bezier);
-    bg_shape.push_back(cyl);
-    bg_shape.push_back(cone);
-    bg_shape.push_back(cube);
+    bg_shape.push_back(torus);
 }
 
 
@@ -184,10 +170,6 @@ std::vector<Texture::SharedPtr> ProgramImplicit3D::generateTexture(RenderContext
     comp["csCb"]["boundingBox"] = boundingBox;
     comp.getProgram()->addDefine("SHAPE", std::to_string(shape));
     comp.allocateStructuredBuffer("data1", resolution * resolution * resolution);
-    comp.allocateStructuredBuffer("nm", n, nm.data(), sizeof(float2) * n);
-    comp["csCb"]["shape"] = shape;
-    comp["csCb"]["n"] = n;
-    comp["csCb"]["nx"] = nx;
 
     comp.runProgram(pRenderContext, resolution, resolution, resolution);
 
